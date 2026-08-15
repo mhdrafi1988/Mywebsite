@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RoofRidgeLines V67 — Voronoi Ridge &amp; Valley Generator for Revit 2026</title>
+  <meta name="description" content="Generate equidistant ridge lines, valley points, and shape points automatically from roof drain openings using Voronoi diagrams in Autodesk Revit 2026.">
+
+  <!-- Core Stylesheets -->
+  <link rel="stylesheet" href="css/design-system.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/pages.css">
+</head>
+<body>
+
+  <!-- ==================== HEADER & GLOBAL NAV ==================== -->
+  <header class="site-header">
+    <div class="wrap nav-container">
+      <a href="index.html" class="brand-logo">
+        <div class="brand-badge">⚡</div>
+        <div>
+          RoofTools<span class="suite-tag">REVIT 2026</span>
+        </div>
+      </a>
+
+      <nav class="nav-menu">
+        <a href="index.html" class="nav-link">Suite Overview</a>
+
+        <div class="nav-dropdown">
+          <a href="#showcase" class="nav-link active">
+            RoofRidgeLines <span class="version-badge" style="margin-left:4px;">V67</span>
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"></polyline></svg>
+          </a>
+          <div class="nav-dropdown-menu">
+            <a href="autoslope-by-point.html" class="dropdown-item">
+              <div class="item-title">AutoSlope by Point <span class="version-badge">V026</span></div>
+              <div class="item-desc">Dijkstra shortest-path point-by-point roof sloping</div>
+            </a>
+            <a href="roofridgelines.html" class="dropdown-item">
+              <div class="item-title">RoofRidgeLines <span class="version-badge">V67</span></div>
+              <div class="item-desc">Voronoi ridge &amp; valley generator for drain openings</div>
+            </a>
+            <a href="autoslope-by-drain.html" class="dropdown-item">
+              <div class="item-title">AutoSlope By Drain <span class="version-badge">V005</span></div>
+              <div class="item-desc">Sketch loop detection &amp; 14 shared Revit parameters</div>
+            </a>
+          </div>
+        </div>
+
+        <a href="#comparison" class="nav-link">Time Comparison</a>
+        <a href="#interface" class="nav-link">Interface</a>
+        <a href="simulator.html" class="nav-link">Live Sandbox</a>
+        <a href="roi-calculator.html" class="nav-link">ROI Calculator</a>
+      </nav>
+
+      <div class="nav-actions">
+        <button class="theme-toggle-btn" aria-label="Toggle Dark/Light Mode"></button>
+        <a href="roi-calculator.html" class="btn btn-gold btn-sm">Calculate Savings</a>
+        <button class="mobile-toggle-btn" aria-label="Open Navigation Menu">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ==================== HERO SECTION ==================== -->
+  <header class="hero">
+    <div class="wrap">
+      <div class="hero-content">
+        <div class="eyebrow" style="background:rgba(91,141,239,0.15);border-color:rgba(91,141,239,0.35);color:#9FC1FF;">
+          Revit26_Plugin · RoofTools · Voronoi Ridge Engine
+        </div>
+        <h1>
+          RoofRidgeLines <span class="gradient-text">V67</span> — Voronoi Ridge &amp; Valley Generator
+        </h1>
+        <p class="lead">
+          Select a roof, tick drain openings, and get equidistant ridge lines, valley points, and shape points placed automatically — replacing manual layout that takes minutes per roof and up to five rework passes.
+        </p>
+
+        <div class="hero-metrics-grid">
+          <div class="hero-metric-card">
+            <div class="num" style="color:var(--emerald);">96.7%</div>
+            <div class="lbl">Time Reduction (Large Roof)</div>
+          </div>
+          <div class="hero-metric-card">
+            <div class="num">10 sec</div>
+            <div class="lbl">Plugin Runtime per Roof</div>
+          </div>
+          <div class="hero-metric-card">
+            <div class="num">100+</div>
+            <div class="lbl">Roofs / Large Project</div>
+          </div>
+          <div class="hero-metric-card">
+            <div class="num">0 Error</div>
+            <div class="lbl">Equidistance Validated</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ==================== TOP COMPARISON STRIP ==================== -->
+  <div class="strip">
+    <div class="wrap">
+      <div class="strip-inner">
+        <div style="font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;color:var(--navy);">
+          Manual vs. Plugin — Tier Snapshot
+        </div>
+        <div class="strip-cta">
+          <a class="strip-link" href="#comparison">
+            See full bar comparison &amp; table
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"></polyline></svg>
+          </a>
+        </div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;margin-top:16px;">
+        <div style="border:1px solid var(--border);border-radius:10px;padding:14px 16px;background:var(--bg-subtle);">
+          <div style="font-size:11px;font-weight:700;color:var(--text-muted);text-transform:uppercase;">Small roof · 2–5 drains</div>
+          <div style="display:flex;align-items:center;gap:6px;font-size:13px;margin:4px 0;"><span class="dot-swatch red"></span>Manual <b>2.0 min</b></div>
+          <div style="display:flex;align-items:center;gap:6px;font-size:13px;"><span class="dot-swatch green"></span>Plugin <b>0.17 min (10s)</b></div>
+          <div style="margin-top:6px;font-size:14px;font-weight:800;color:var(--emerald);">−91.7% Saved</div>
+        </div>
+
+        <div style="border:1px solid var(--border);border-radius:10px;padding:14px 16px;background:var(--bg-subtle);">
+          <div style="font-size:11px;font-weight:700;color:var(--text-muted);text-transform:uppercase;">Medium roof · 6–10 drains</div>
+          <div style="display:flex;align-items:center;gap:6px;font-size:13px;margin:4px 0;"><span class="dot-swatch red"></span>Manual <b>3.5 min</b></div>
+          <div style="display:flex;align-items:center;gap:6px;font-size:13px;"><span class="dot-swatch green"></span>Plugin <b>0.17 min (10s)</b></div>
+          <div style="margin-top:6px;font-size:14px;font-weight:800;color:var(--emerald);">−95.2% Saved</div>
+        </div>
+
+        <div style="border:1px solid var(--border);border-radius:10px;padding:14px 16px;background:var(--bg-subtle);">
+          <div style="font-size:11px;font-weight:700;color:var(--text-muted);text-transform:uppercase;">Large roof · 11+ drains</div>
+          <div style="display:flex;align-items:center;gap:6px;font-size:13px;margin:4px 0;"><span class="dot-swatch red"></span>Manual <b>5.0 min</b></div>
+          <div style="display:flex;align-items:center;gap:6px;font-size:13px;"><span class="dot-swatch green"></span>Plugin <b>0.17 min (10s)</b></div>
+          <div style="margin-top:6px;font-size:14px;font-weight:800;color:var(--emerald);">−96.7% Saved</div>
+        </div>
+
+        <div style="background:var(--navy);border:1px solid var(--navy);border-radius:10px;padding:14px 16px;color:#fff;">
+          <div style="font-size:11px;font-weight:700;color:#9FC1FF;text-transform:uppercase;">100-roof project (large)</div>
+          <div style="font-family:var(--font-display);font-size:24px;font-weight:800;color:#fff;margin-top:4px;">8.3 hr → 16.7 m</div>
+          <div style="font-size:11.5px;color:rgba(235,242,250,0.7);margin-top:2px;">total manual vs. plugin time</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== TOOL SHOWCASE ==================== -->
+  <section class="section" id="showcase">
+    <div class="wrap">
+      <div class="section-head">
+        <div class="eyebrow">Algorithmic Pillars</div>
+        <h2 class="section-title">What RoofRidgeLines Does</h2>
+        <p class="section-desc">
+          Treats each selected drain / opening centroid as a Voronoi site, computes the mathematical diagram, clips it to the roof boundary, and validates equidistance before placing elements.
+        </p>
+      </div>
+
+      <div class="grid-features" style="grid-template-columns:repeat(4,1fr);margin-bottom:64px;">
+        <div class="feat-card">
+          <div class="feat-icon">◆</div>
+          <h4>Automatic Loop Detection</h4>
+          <p>Extracts all inner loops (drains, skylights, RTU curbs) from the selected roof and classifies each as circle, rectangle, or custom shape.</p>
+        </div>
+
+        <div class="feat-card">
+          <div class="feat-icon">▽</div>
+          <h4>Voronoi Ridge Computation</h4>
+          <p>Groups nearby drain seeds within a configurable proximity, then computes a Voronoi diagram on a background thread from group centroids.</p>
+        </div>
+
+        <div class="feat-card">
+          <div class="feat-icon">✂</div>
+          <h4>Boundary Clipping</h4>
+          <p>Clips raw Voronoi edges to the roof's actual boundary polygon and derives ridge midpoints and shape points automatically.</p>
+        </div>
+
+        <div class="feat-card">
+          <div class="feat-icon">✓</div>
+          <h4>Equidistance Validation</h4>
+          <p>Checks every ridge against a configurable tolerance and logs pass/fail per segment before any Revit elements are created.</p>
+        </div>
+      </div>
+
+      <div class="section-head">
+        <div class="eyebrow">Pipeline Architecture</div>
+        <h2 class="section-title">Six-Step Generation Pipeline</h2>
+      </div>
+
+      <div class="steps-container" style="grid-template-columns:repeat(6,1fr);">
+        <div class="step-card">
+          <div class="step-num-badge">1</div>
+          <h4>Select Roof &amp; Seeds</h4>
+          <p>Pick a roof; inner loops are loaded. Tick at least 2 as drainage seeds.</p>
+        </div>
+        <div class="step-card">
+          <div class="step-num-badge">2</div>
+          <h4>Group Seeds</h4>
+          <p>Seeds within proximity (default 50mm) are merged into drain groups.</p>
+        </div>
+        <div class="step-card">
+          <div class="step-num-badge">3</div>
+          <h4>Compute Voronoi</h4>
+          <p>Group centroids become Voronoi sites; raw edges/vertices generated.</p>
+        </div>
+        <div class="step-card">
+          <div class="step-num-badge">4</div>
+          <h4>Clip to Boundary</h4>
+          <p>Raw edges clipped to boundary polygon; midpoints and shape points derived.</p>
+        </div>
+        <div class="step-card">
+          <div class="step-num-badge">5</div>
+          <h4>Validate Equidistance</h4>
+          <p>Every ridge checked against tolerance; results logged pass/fail.</p>
+        </div>
+        <div class="step-card">
+          <div class="step-num-badge">6</div>
+          <h4>Create Elements</h4>
+          <p>Detail lines and shape points placed in active view using selected style.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== INTERFACE & LIVE PIPELINE LOG ==================== -->
+  <section class="section band-alt" id="interface">
+    <div class="wrap">
+      <div class="section-head">
+        <div class="eyebrow">User Interface</div>
+        <h2 class="section-title">Interactive Tool Window &amp; Pipeline Log</h2>
+        <p class="section-desc">
+          Live streaming execution log and field layout mirroring the tool inside Revit 2026.
+        </p>
+      </div>
+
+      <div class="two-col-layout">
+        <!-- Mock Tool UI -->
+        <div class="panel-window">
+          <div class="panel-header">
+            <span>RoofRidgeLines V67 — Voronoi Ridge Generator</span>
+            <span style="color:#9FC1FF;font-family:var(--font-mono);font-size:11px;">Revit 2026</span>
+          </div>
+          <div class="panel-body">
+            <div style="font-size:11px;color:var(--text-muted);text-transform:uppercase;margin-bottom:4px;font-weight:700;">Active Roof Element</div>
+            <div style="background:var(--bg-subtle);border:1px solid var(--border);border-radius:6px;padding:8px 12px;font-size:13px;margin-bottom:14px;font-weight:600;">
+              Roof: Low Roof — Zone C (Id 481022)
+            </div>
+
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px;">
+              <div>
+                <div style="font-size:11px;color:var(--text-muted);margin-bottom:4px;">Proximity Distance (mm)</div>
+                <div style="border:1px solid var(--border);border-radius:6px;padding:6px 10px;font-size:13px;font-family:var(--font-mono);">50.0</div>
+              </div>
+              <div>
+                <div style="font-size:11px;color:var(--text-muted);margin-bottom:4px;">Validation Tolerance (mm)</div>
+                <div style="border:1px solid var(--border);border-radius:6px;padding:6px 10px;font-size:13px;font-family:var(--font-mono);">50.0</div>
+              </div>
+            </div>
+
+            <div style="font-size:11px;color:var(--text-muted);margin-bottom:6px;font-weight:700;">Inner Opening Loops Detected</div>
+            <div style="border:1px solid var(--border);border-radius:8px;overflow:hidden;margin-bottom:16px;">
+              <div style="display:flex;justify-content:space-between;background:var(--navy);color:#fff;padding:6px 10px;font-size:11.5px;font-weight:700;">
+                <span>Opening</span><span>Shape</span><span>Selected</span>
+              </div>
+              <div style="display:flex;justify-content:space-between;padding:6px 10px;font-size:12px;border-bottom:1px solid var(--border-light);">
+                <span>Drain #1</span><span>Circle</span><span style="color:var(--emerald);font-weight:800;">✓</span>
+              </div>
+              <div style="display:flex;justify-content:space-between;padding:6px 10px;font-size:12px;border-bottom:1px solid var(--border-light);">
+                <span>Drain #2</span><span>Circle</span><span style="color:var(--emerald);font-weight:800;">✓</span>
+              </div>
+              <div style="display:flex;justify-content:space-between;padding:6px 10px;font-size:12px;">
+                <span>RTU Curb</span><span>Rectangle</span><span style="color:var(--emerald);font-weight:800;">✓</span>
+              </div>
+            </div>
+
+            <div class="btn btn-primary" style="width:100%;">Run Voronoi Ridge Generation</div>
+
+            <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:14px;text-align:center;">
+              <div style="background:var(--bg-subtle);border:1px solid var(--border);border-radius:8px;padding:8px;">
+                <div style="font-family:var(--font-display);font-size:18px;font-weight:800;color:var(--navy);">11</div>
+                <div style="font-size:10px;color:var(--text-muted);">CALCULATED</div>
+              </div>
+              <div style="background:var(--bg-subtle);border:1px solid var(--border);border-radius:8px;padding:8px;">
+                <div style="font-family:var(--font-display);font-size:18px;font-weight:800;color:var(--emerald);">11</div>
+                <div style="font-size:10px;color:var(--text-muted);">ADDED</div>
+              </div>
+              <div style="background:var(--bg-subtle);border:1px solid var(--border);border-radius:8px;padding:8px;">
+                <div style="font-family:var(--font-display);font-size:18px;font-weight:800;color:var(--text-muted);">0</div>
+                <div style="font-size:10px;color:var(--text-muted);">FAILED</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Terminal Live Log -->
+        <div class="terminal-card">
+          <div class="terminal-header">
+            <div class="terminal-title">
+              <span class="dot-swatch green"></span>
+              <span>RoofRidgeLines.Pipeline.Log</span>
+            </div>
+            <div class="terminal-actions">
+              <button class="terminal-btn" data-copy-target="ridgePipelineLog">Copy Log</button>
+            </div>
+          </div>
+          <div class="terminal-body" id="ridgePipelineLog">
+[START] 14:22:07.114 Initializing Voronoi Ridge Pipeline…<br>
+[INPUT] Roof: Low Roof — Zone C (Id=481022)<br>
+[INPUT] Proximity distance: 50.0 mm | Validation tolerance: 50.0 mm<br>
+<span class="log-step">[STEP 1] Extracting roof boundary polygon…</span><br>
+&nbsp;&nbsp;<span class="log-sub">Boundary vertices extracted: 14 | Total loops: 3</span><br>
+<span class="log-step">[STEP 2] Classifying inner opening loops…</span><br>
+&nbsp;&nbsp;<span class="log-sub">2 circles, 1 rectangle detected</span><br>
+<span class="log-step">[STEP 3] Grouping drain seeds…</span><br>
+&nbsp;&nbsp;<span class="log-ok">Groups formed: 4 drain seed sites</span><br>
+<span class="log-step">[STEP 4] Computing Voronoi diagram (Fortune's algorithm)…</span><br>
+&nbsp;&nbsp;<span class="log-sub">Raw Voronoi edges generated: 17</span><br>
+<span class="log-step">[STEP 5] Clipping Voronoi edges to roof boundary polygon…</span><br>
+&nbsp;&nbsp;<span class="log-ok">Clipped ridge edges: 9 | Derived shape points: 11</span><br>
+<span class="log-step">[STEP 6] Validating equidistance tolerance…</span><br>
+&nbsp;&nbsp;<span class="log-ok">Pass: 11 / 11 (100.0%)</span> | Fail: 0<br>
+<span class="log-step">[STEP 7] Creating Revit elements in active view…</span><br>
+&nbsp;&nbsp;<span class="log-ok">Detail lines created: 9 | Shape points placed: 11</span><br>
+<span class="log-ok">[END] Pipeline execution completed in 9.4s. Transaction committed.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== COMPARISON SECTION ==================== -->
+  <section class="section" id="comparison">
+    <div class="wrap">
+      <div class="section-head">
+        <div class="eyebrow">Manual vs. Plugin Time Comparison</div>
+        <h2 class="section-title">The Full Productivity Picture</h2>
+        <p class="section-desc">
+          Manual figures reflect drawing ridge and valley bisectors by hand from drain locations. Plugin figures reflect actual pipeline runtime (10s) plus one review pass.
+        </p>
+      </div>
+
+      <!-- Drain Tier Switcher -->
+      <div class="toggle-row">
+        <button class="toggle-pill-btn" data-tier-drain="small">Small · 2–5 drains</button>
+        <button class="toggle-pill-btn" data-tier-drain="medium">Medium · 6–10 drains</button>
+        <button class="toggle-pill-btn active" data-tier-drain="large">Large · 11+ drains</button>
+      </div>
+
+      <!-- Stat Cards -->
+      <div class="stats-summary-grid" id="statCards">
+        <!-- Populated by js/calculators.js -->
+      </div>
+
+      <!-- Proportional Comparison Bar Chart -->
+      <div style="max-width:700px;margin:0 auto 44px;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-xl);padding:36px;box-shadow:var(--shadow-md);">
+        <div style="margin-bottom:24px;">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
+            <div style="display:flex;align-items:center;gap:8px;font-size:13.5px;font-weight:700;text-transform:uppercase;">
+              <span class="dot-swatch red"></span> Manual Process
+            </div>
+            <span id="barManualValue" style="font-family:var(--font-display);font-size:18px;font-weight:800;color:var(--danger);">5.0 min</span>
+          </div>
+          <div style="background:var(--bg-subtle);border-radius:8px;height:24px;overflow:hidden;">
+            <div id="barManualFill" style="height:100%;border-radius:8px;background:linear-gradient(90deg,#E74C3C,#F0837D);width:100%;transition:width .4s ease;"></div>
+          </div>
+        </div>
+
+        <div style="margin-bottom:18px;">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
+            <div style="display:flex;align-items:center;gap:8px;font-size:13.5px;font-weight:700;text-transform:uppercase;">
+              <span class="dot-swatch green"></span> RoofRidgeLines Plugin
+            </div>
+            <span id="barPluginValue" style="font-family:var(--font-display);font-size:18px;font-weight:800;color:var(--emerald);">10 sec</span>
+          </div>
+          <div style="background:var(--bg-subtle);border-radius:8px;height:24px;overflow:hidden;">
+            <div id="barPluginFill" style="height:100%;border-radius:8px;background:linear-gradient(90deg,#27AE60,#4CC18A);width:3.3%;min-width:8px;transition:width .4s ease;"></div>
+          </div>
+        </div>
+
+        <div id="barMultiple" style="text-align:center;font-size:14px;color:var(--text-muted);padding-top:12px;border-top:1px solid var(--border-light);">
+          Manual takes <b>30×</b> longer per roof
+        </div>
+      </div>
+
+      <!-- Comparison Table -->
+      <div class="breakdown-table-wrap">
+        <table class="breakdown-table">
+          <thead>
+            <tr>
+              <th>Tier</th>
+              <th>Manual / Roof</th>
+              <th>Plugin / Roof</th>
+              <th>Reduction</th>
+              <th>100 Roofs — Manual</th>
+              <th>100 Roofs — Plugin</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Small (2–5 drains)</td>
+              <td class="num" style="color:var(--danger)">2.0 min</td>
+              <td class="num" style="color:var(--emerald)">10 sec</td>
+              <td class="num" style="color:var(--emerald)">−91.7%</td>
+              <td>3.3 hr</td>
+              <td>16.7 min</td>
+            </tr>
+            <tr>
+              <td>Medium (6–10 drains)</td>
+              <td class="num" style="color:var(--danger)">3.5 min</td>
+              <td class="num" style="color:var(--emerald)">10 sec</td>
+              <td class="num" style="color:var(--emerald)">−95.2%</td>
+              <td>5.8 hr</td>
+              <td>16.7 min</td>
+            </tr>
+            <tr>
+              <td>Large (11+ drains)</td>
+              <td class="num" style="color:var(--danger)">5.0 min</td>
+              <td class="num" style="color:var(--emerald)">10 sec</td>
+              <td class="num" style="color:var(--emerald)">−96.7%</td>
+              <td>8.3 hr</td>
+              <td>16.7 min</td>
+            </tr>
+            <tr style="background:var(--bg-subtle);font-weight:800;">
+              <td>Rework — Large (Worst Case)</td>
+              <td class="num" style="color:var(--danger)">25.0 min (5 passes)</td>
+              <td class="num" style="color:var(--emerald)">10 sec (1 pass)</td>
+              <td class="num" style="color:var(--emerald)">−99.3%</td>
+              <td colspan="2" style="font-size:12px;color:var(--text-muted);font-weight:400;">Rework not compounded into base totals above</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Assumptions -->
+      <div class="assumptions-box">
+        <h4>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+          Assumptions &amp; Notes
+        </h4>
+        <ul>
+          <li>Manual time (2 / 3.5 / 5 min) and complexity tiers (2–5 / 6–10 / 11+ drains) based on verified drafting baselines.</li>
+          <li>Plugin runtime (10 sec/roof) covers background Voronoi diagram generation, boundary clipping, and view element placement.</li>
+          <li>100-roof project volume serves as the commercial standing default.</li>
+          <li>Rework: manual assumes up to 5 full redo passes before shop drawing sign-off; plugin assumes 1 review pass as the base case.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== FOOTER ==================== -->
+  <footer class="site-footer">
+    <div class="wrap">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <h4>⚡ RoofRidgeLines V67</h4>
+          <p>
+            Voronoi-based equidistant ridge and valley generator for Autodesk Revit 2026.
+          </p>
+        </div>
+
+        <div class="footer-col">
+          <h5>Tools in Suite</h5>
+          <div class="footer-links">
+            <a href="autoslope-by-point.html">AutoSlope by Point V026</a>
+            <a href="roofridgelines.html">RoofRidgeLines V67</a>
+            <a href="autoslope-by-drain.html">AutoSlope By Drain V005</a>
+          </div>
+        </div>
+
+        <div class="footer-col">
+          <h5>Interactive Tools</h5>
+          <div class="footer-links">
+            <a href="simulator.html">Live 2D Roof Simulator</a>
+            <a href="roi-calculator.html">Executive ROI Calculator</a>
+            <a href="index.html#parameters">Parameters Dictionary</a>
+          </div>
+        </div>
+
+        <div class="footer-col">
+          <h5>Documentation</h5>
+          <p style="font-size:12.5px;line-height:1.6;">
+            Autodesk Revit 2026<br>
+            Internal Tooling &amp; Voronoi Geometry<br>
+            Detail Lines &amp; Model Shape Points
+          </p>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <div>© 2026 Revit26_Plugin · RoofRidgeLines V67. Internal tool comparison.</div>
+        <div>Autodesk Revit is a registered trademark of Autodesk, Inc.</div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="js/app.js"></script>
+  <script src="js/calculators.js"></script>
+</body>
+</html>

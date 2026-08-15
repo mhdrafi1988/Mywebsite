@@ -1,0 +1,578 @@
+/* ==========================================================================
+   Revit26 RoofTools Suite — Page Layouts & Specialized Views
+   ========================================================================== */
+
+/* ---------- MASTER PORTAL HERO & SUITE CARDS ---------- */
+.portal-hero {
+  padding: 100px 0 80px;
+  background: radial-gradient(800px 400px at 80% 20%, rgba(45, 108, 223, 0.22), transparent 70%),
+              radial-gradient(600px 300px at 20% 80%, rgba(201, 162, 75, 0.15), transparent 70%),
+              var(--hero-grad);
+  position: relative;
+}
+
+.portal-hero-grid {
+  display: grid;
+  grid-template-columns: 1.15fr 0.85fr;
+  gap: 48px;
+  align-items: center;
+}
+
+@media (max-width: 960px) {
+  .portal-hero-grid { grid-template-columns: 1fr; }
+}
+
+.hero-visual-card {
+  background: rgba(18, 35, 59, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-xl);
+  overflow: hidden;
+  position: relative;
+}
+
+.hero-canvas-container {
+  width: 100%;
+  height: 340px;
+  position: relative;
+  background: #0D1C2E;
+}
+
+.hero-canvas-container canvas {
+  width: 100%;
+  height: 100%;
+}
+
+.hero-canvas-overlay {
+  position: absolute;
+  bottom: 12px;
+  left: 12px;
+  right: 12px;
+  background: rgba(11, 25, 44, 0.85);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius-md);
+  padding: 10px 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 12px;
+  color: #B9CBE0;
+}
+
+/* Suite Module Showcase Cards (Hub Page) */
+.suite-modules-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 28px;
+}
+
+@media (max-width: 960px) {
+  .suite-modules-grid { grid-template-columns: 1fr; }
+}
+
+.module-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  flex-direction: column;
+  transition: all var(--transition-normal);
+  position: relative;
+}
+
+.module-card:hover {
+  transform: translateY(-6px);
+  box-shadow: var(--shadow-lg);
+  border-color: var(--blue-light);
+}
+
+.module-card-header {
+  padding: 28px 28px 20px;
+  border-bottom: 1px solid var(--border-light);
+  position: relative;
+}
+
+.module-tag-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
+}
+
+.module-version-tag {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--gold);
+  background: var(--gold-soft);
+  border: 1px solid rgba(201, 162, 75, 0.35);
+  padding: 3px 10px;
+  border-radius: var(--radius-full);
+}
+
+.module-icon-wrap {
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius-md);
+  background: linear-gradient(135deg, var(--navy), var(--navy-light));
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 12px rgba(30, 58, 95, 0.25);
+}
+
+.module-card-header h3 {
+  font-size: 20px;
+  margin-bottom: 6px;
+}
+
+.module-card-header p {
+  font-size: 13.5px;
+  color: var(--text-muted);
+  line-height: 1.5;
+}
+
+.module-card-body {
+  padding: 24px 28px;
+  flex-grow: 1;
+}
+
+.module-features-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 24px;
+}
+
+.module-feature-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13.5px;
+  color: var(--text-main);
+}
+
+.module-feature-item svg {
+  color: var(--emerald);
+  flex-shrink: 0;
+}
+
+.module-stats-mini {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  background: var(--bg-subtle);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 12px 14px;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.module-stat-val {
+  font-family: var(--font-display);
+  font-size: 20px;
+  font-weight: 800;
+  color: var(--navy);
+}
+
+.module-stat-lbl {
+  font-size: 11px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin-top: 2px;
+}
+
+.module-card-footer {
+  padding: 20px 28px;
+  border-top: 1px solid var(--border-light);
+  background: var(--bg-subtle);
+}
+
+/* ---------- CROSS-TOOL MATRIX TABLE ---------- */
+.matrix-table-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+  box-shadow: var(--shadow-md);
+}
+
+.matrix-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13.5px;
+}
+
+.matrix-table th {
+  background: var(--navy);
+  color: #FFFFFF;
+  padding: 16px 20px;
+  text-align: left;
+  font-weight: 700;
+  font-size: 13px;
+  letter-spacing: 0.02em;
+}
+
+.matrix-table th.tool-header {
+  text-align: center;
+  width: 25%;
+}
+
+.matrix-table td {
+  padding: 14px 20px;
+  border-top: 1px solid var(--border);
+  color: var(--text-main);
+}
+
+.matrix-table td.feature-title {
+  font-weight: 700;
+  background: var(--bg-subtle);
+  width: 25%;
+}
+
+.matrix-table td.tool-cell {
+  text-align: center;
+}
+
+.matrix-table tr:hover td:not(.feature-title) {
+  background: rgba(45, 108, 223, 0.04);
+}
+
+/* ---------- REVT SHARED PARAMETERS DIRECTORY ---------- */
+.param-search-bar {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+}
+
+.search-input-wrap {
+  position: relative;
+  flex-grow: 1;
+}
+
+.search-input-wrap input {
+  width: 100%;
+  background: var(--bg-card);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 10px 16px 10px 42px;
+  font-size: 14px;
+  color: var(--text-main);
+  outline: none;
+  transition: border-color var(--transition-fast);
+}
+
+.search-input-wrap input:focus {
+  border-color: var(--blue);
+  box-shadow: 0 0 0 3px var(--blue-soft);
+}
+
+.search-input-wrap svg {
+  position: absolute;
+  left: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-muted);
+}
+
+.param-filter-btn {
+  background: var(--bg-card);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 8px 16px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.param-filter-btn.active, .param-filter-btn:hover {
+  background: var(--navy);
+  border-color: var(--navy);
+  color: #FFFFFF;
+}
+
+/* Parameter Grid */
+.param-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+  gap: 16px;
+}
+
+@media (max-width: 600px) {
+  .param-grid { grid-template-columns: 1fr; }
+}
+
+.param-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 18px 20px;
+  box-shadow: var(--shadow-xs);
+  transition: all var(--transition-fast);
+}
+
+.param-card:hover {
+  transform: translateY(-2px);
+  border-color: var(--blue);
+  box-shadow: var(--shadow-sm);
+}
+
+.param-card-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.param-name {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--navy);
+}
+
+[data-theme="dark"] .param-name {
+  color: #9FC1FF;
+}
+
+.param-badge {
+  font-size: 10.5px;
+  font-weight: 700;
+  font-family: var(--font-mono);
+  background: var(--blue-soft);
+  color: var(--blue);
+  padding: 2px 8px;
+  border-radius: var(--radius-full);
+}
+
+.param-desc {
+  font-size: 12.5px;
+  color: var(--text-muted);
+  line-height: 1.5;
+}
+
+/* ---------- EXECUTIVE ROI CALCULATOR VIEW ---------- */
+.roi-calculator-layout {
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  gap: 36px;
+  align-items: start;
+}
+
+@media (max-width: 960px) {
+  .roi-calculator-layout { grid-template-columns: 1fr; }
+}
+
+.calc-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl);
+  padding: 32px;
+  box-shadow: var(--shadow-md);
+}
+
+.calc-group {
+  margin-bottom: 24px;
+}
+
+.calc-label-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.calc-label {
+  font-size: 13.5px;
+  font-weight: 700;
+  color: var(--text-main);
+}
+
+.calc-val-display {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: 15px;
+  color: var(--blue);
+}
+
+.calc-slider {
+  width: 100%;
+  height: 8px;
+  border-radius: 4px;
+  background: var(--bg-subtle);
+  outline: none;
+  -webkit-appearance: none;
+  cursor: pointer;
+}
+
+.calc-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--blue);
+  box-shadow: 0 2px 6px rgba(45, 108, 223, 0.4);
+  cursor: pointer;
+  transition: transform var(--transition-fast);
+}
+
+.calc-slider::-webkit-slider-thumb:hover {
+  transform: scale(1.15);
+}
+
+/* ROI Results Panel */
+.roi-results-card {
+  background: linear-gradient(155deg, var(--navy-deep) 0%, var(--navy) 100%);
+  color: #FFFFFF;
+  border-radius: var(--radius-xl);
+  padding: 36px 32px;
+  box-shadow: var(--shadow-xl);
+  position: sticky;
+  top: calc(var(--nav-height) + 20px);
+}
+
+.roi-hero-stat {
+  text-align: center;
+  padding-bottom: 28px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+  margin-bottom: 28px;
+}
+
+.roi-hero-stat .stat-super {
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--gold);
+}
+
+.roi-hero-stat .stat-large {
+  font-family: var(--font-display);
+  font-size: 48px;
+  font-weight: 800;
+  color: #FFFFFF;
+  margin: 6px 0;
+  line-height: 1;
+}
+
+.roi-hero-stat .stat-sub {
+  font-size: 14px;
+  color: rgba(235, 242, 250, 0.75);
+}
+
+.roi-breakdown-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 28px;
+}
+
+.roi-mini-card {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: var(--radius-md);
+  padding: 16px 14px;
+  text-align: center;
+}
+
+.roi-mini-card .val {
+  font-family: var(--font-display);
+  font-size: 22px;
+  font-weight: 800;
+  color: #FFFFFF;
+}
+
+.roi-mini-card .lbl {
+  font-size: 11px;
+  color: rgba(235, 242, 250, 0.7);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin-top: 4px;
+}
+
+/* ---------- LIVE ROOF SIMULATOR VIEW ---------- */
+.sim-container {
+  display: grid;
+  grid-template-columns: 320px 1fr;
+  gap: 24px;
+  align-items: start;
+}
+
+@media (max-width: 960px) {
+  .sim-container { grid-template-columns: 1fr; }
+}
+
+.sim-sidebar {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  box-shadow: var(--shadow-sm);
+}
+
+.sim-canvas-panel {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-md);
+}
+
+.sim-canvas-toolbar {
+  background: var(--navy);
+  color: #FFFFFF;
+  padding: 12px 18px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.sim-canvas-viewport {
+  width: 100%;
+  height: 520px;
+  background: #0A1626;
+  position: relative;
+  cursor: crosshair;
+}
+
+.sim-canvas-viewport canvas {
+  width: 100%;
+  height: 100%;
+}
+
+.sim-legend-bar {
+  padding: 12px 18px;
+  background: var(--bg-subtle);
+  border-top: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 12.5px;
+  color: var(--text-muted);
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.elevation-gradient-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.grad-strip {
+  width: 140px;
+  height: 10px;
+  border-radius: var(--radius-full);
+  background: linear-gradient(90deg, #27AE60 0%, #F1C40F 50%, #E74C3C 100%);
+}

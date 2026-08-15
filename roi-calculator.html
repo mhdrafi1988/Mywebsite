@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Executive ROI &amp; Financial Savings Calculator — Revit26 RoofTools Suite</title>
+  <meta name="description" content="Calculate your firm's direct labor savings, drafting hours reduced, and project ROI using the Revit26 RoofTools Plugin Suite.">
+
+  <!-- Core Stylesheets -->
+  <link rel="stylesheet" href="css/design-system.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/pages.css">
+</head>
+<body>
+
+  <!-- ==================== HEADER & GLOBAL NAV ==================== -->
+  <header class="site-header">
+    <div class="wrap nav-container">
+      <a href="index.html" class="brand-logo">
+        <div class="brand-badge">⚡</div>
+        <div>
+          RoofTools<span class="suite-tag">REVIT 2026</span>
+        </div>
+      </a>
+
+      <nav class="nav-menu">
+        <a href="index.html" class="nav-link">Suite Overview</a>
+
+        <div class="nav-dropdown">
+          <a href="#" class="nav-link">
+            Tools &amp; Plugins
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"></polyline></svg>
+          </a>
+          <div class="nav-dropdown-menu">
+            <a href="autoslope-by-point.html" class="dropdown-item">
+              <div class="item-title">AutoSlope by Point <span class="version-badge">V026</span></div>
+              <div class="item-desc">Dijkstra shortest-path point-by-point roof sloping</div>
+            </a>
+            <a href="roofridgelines.html" class="dropdown-item">
+              <div class="item-title">RoofRidgeLines <span class="version-badge">V67</span></div>
+              <div class="item-desc">Voronoi ridge &amp; valley generator for drain openings</div>
+            </a>
+            <a href="autoslope-by-drain.html" class="dropdown-item">
+              <div class="item-title">AutoSlope By Drain <span class="version-badge">V005</span></div>
+              <div class="item-desc">Sketch loop detection &amp; 14 shared Revit parameters</div>
+            </a>
+          </div>
+        </div>
+
+        <a href="simulator.html" class="nav-link">Live Sandbox</a>
+        <a href="roi-calculator.html" class="nav-link active">ROI Calculator</a>
+        <a href="index.html#parameters" class="nav-link">Parameters</a>
+      </nav>
+
+      <div class="nav-actions">
+        <button class="theme-toggle-btn" aria-label="Toggle Dark/Light Mode"></button>
+        <button onclick="window.print()" class="btn btn-outline btn-sm">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
+          Print / PDF
+        </button>
+        <button class="mobile-toggle-btn" aria-label="Open Navigation Menu">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ==================== HERO HEADER ==================== -->
+  <section class="section" style="padding:56px 0 32px;">
+    <div class="wrap">
+      <div class="section-head left-aligned" style="margin-bottom:24px;">
+        <div class="eyebrow gold">
+          <span class="dot"></span> Executive Business Case &amp; Financial Modeler
+        </div>
+        <h1 class="section-title">Custom Project ROI &amp; Labor Savings Calculator</h1>
+        <p class="section-desc">
+          Customize project volume, vertex point complexity, BIM labor billing rates, and rework cycles to project exact dollar and hour savings for leadership review.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== CALCULATOR WORKSPACE ==================== -->
+  <section class="section" style="padding-top:0;">
+    <div class="wrap">
+      <div class="roi-calculator-layout">
+
+        <!-- Input Parameters Card -->
+        <div class="calc-card">
+          <h2 style="font-size:20px;margin-bottom:24px;display:flex;align-items:center;gap:10px;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--blue)" stroke-width="2"><rect x="4" y="2" width="16" height="20" rx="2"></rect><line x1="8" y1="6" x2="16" y2="6"></line><line x1="16" y1="14" x2="16" y2="18"></line><path d="M16 10h.01"></path><path d="M12 10h.01"></path><path d="M8 10h.01"></path><path d="M12 14h.01"></path><path d="M8 14h.01"></path><path d="M12 18h.01"></path><path d="M8 18h.01"></path></svg>
+            Project Parameters
+          </h2>
+
+          <!-- Roof Count Slider -->
+          <div class="calc-group">
+            <div class="calc-label-row">
+              <span class="calc-label">Total Commercial Roofs in Scope</span>
+              <span class="calc-val-display" id="calcRoofsVal">50 roofs</span>
+            </div>
+            <input type="range" class="calc-slider" id="calcRoofs" min="5" max="250" step="5" value="50">
+            <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--text-muted);margin-top:4px;">
+              <span>5 (Small Project)</span>
+              <span>100 (Standard Tower)</span>
+              <span>250 (Campus Masterplan)</span>
+            </div>
+          </div>
+
+          <!-- Points per Roof Slider -->
+          <div class="calc-group">
+            <div class="calc-label-row">
+              <span class="calc-label">Average Vertices &amp; Drain Points per Roof</span>
+              <span class="calc-val-display" id="calcPointsVal">300 pts / roof</span>
+            </div>
+            <input type="range" class="calc-slider" id="calcPoints" min="100" max="600" step="50" value="300">
+            <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--text-muted);margin-top:4px;">
+              <span>100 (Simple)</span>
+              <span>300 (Moderate Openings)</span>
+              <span>600 (Complex Skylights)</span>
+            </div>
+          </div>
+
+          <!-- Hourly Rate Slider -->
+          <div class="calc-group">
+            <div class="calc-label-row">
+              <span class="calc-label">BIM Modeler / Drafter Hourly Rate ($/hr)</span>
+              <span class="calc-val-display" id="calcRateVal">$85 / hr</span>
+            </div>
+            <input type="range" class="calc-slider" id="calcRate" min="40" max="180" step="5" value="85">
+            <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--text-muted);margin-top:4px;">
+              <span>$40/hr (Internal Cost)</span>
+              <span>$85/hr (Blended Rate)</span>
+              <span>$180/hr (Client Billing)</span>
+            </div>
+          </div>
+
+          <!-- Rework Passes Slider -->
+          <div class="calc-group">
+            <div class="calc-label-row">
+              <span class="calc-label">Manual Rework Iterations (Shop Drawing Review Cycles)</span>
+              <span class="calc-val-display" id="calcReworkVal">3 passes</span>
+            </div>
+            <input type="range" class="calc-slider" id="calcRework" min="1" max="5" step="1" value="3">
+            <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--text-muted);margin-top:4px;">
+              <span>1 Pass (Base Run)</span>
+              <span>3 Passes (Typical)</span>
+              <span>5 Passes (Worst-Case Re-do)</span>
+            </div>
+          </div>
+
+          <div class="assumptions-box" style="margin-top:28px;">
+            <h4>Model Methodology</h4>
+            <ul>
+              <li>Manual sloping rate modeled at confirmed baseline: 20 seconds per shape vertex.</li>
+              <li>Plugin runtime modeled at 3–5 min per roof (algorithm + reviewer confirmation).</li>
+              <li>Calculations reflect direct labor savings prior to downstream MEP clash prevention.</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Calculated Outcome Panel -->
+        <div class="roi-results-card">
+          <div class="roi-hero-stat">
+            <div class="stat-super">Projected Direct Labor Savings</div>
+            <div class="stat-large" id="roiDollarsSaved" style="color:var(--gold);">$19,904</div>
+            <div class="stat-sub">Direct cost reduction on roof drainage modeling</div>
+          </div>
+
+          <div class="roi-breakdown-grid">
+            <div class="roi-mini-card">
+              <div class="val" id="roiHoursSaved" style="color:#2ECC71;">244 hrs</div>
+              <div class="lbl">Drafting Hours Saved</div>
+            </div>
+            <div class="roi-mini-card">
+              <div class="val" id="roiPctSaved" style="color:var(--gold);">97%</div>
+              <div class="lbl">Effort Reduction</div>
+            </div>
+            <div class="roi-mini-card">
+              <div class="val" id="roiSpeedup">33.3×</div>
+              <div class="lbl">Speedup Multiplier</div>
+            </div>
+            <div class="roi-mini-card">
+              <div class="val">&lt; 1 wk</div>
+              <div class="lbl">Payback Period</div>
+            </div>
+          </div>
+
+          <div style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);border-radius:var(--radius-md);padding:18px;margin-bottom:24px;">
+            <div style="display:flex;justify-content:space-between;margin-bottom:10px;font-size:13.5px;">
+              <span style="color:rgba(235,242,250,0.8);">Traditional Manual Cost:</span>
+              <b style="color:#FF6B6B;" id="roiManualCost">$21,250</b>
+            </div>
+            <div style="display:flex;justify-content:space-between;font-size:13.5px;">
+              <span style="color:rgba(235,242,250,0.8);">Revit26 RoofTools Cost:</span>
+              <b style="color:#2ECC71;" id="roiPluginCost">$1,346</b>
+            </div>
+          </div>
+
+          <button onclick="window.print()" class="btn btn-gold btn-lg" style="width:100%;">
+            Export Executive Report
+          </button>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== FOOTER ==================== -->
+  <footer class="site-footer">
+    <div class="wrap">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <h4>⚡ Revit26 RoofTools Suite</h4>
+          <p>
+            Executive ROI and productivity modeling for commercial BIM teams using Autodesk Revit 2026.
+          </p>
+        </div>
+
+        <div class="footer-col">
+          <h5>Tools &amp; Plugins</h5>
+          <div class="footer-links">
+            <a href="autoslope-by-point.html">AutoSlope by Point V026</a>
+            <a href="roofridgelines.html">RoofRidgeLines V67</a>
+            <a href="autoslope-by-drain.html">AutoSlope By Drain V005</a>
+          </div>
+        </div>
+
+        <div class="footer-col">
+          <h5>Interactive Tools</h5>
+          <div class="footer-links">
+            <a href="simulator.html">Live 2D Roof Simulator</a>
+            <a href="roi-calculator.html">Executive ROI Calculator</a>
+            <a href="index.html#parameters">Parameters Dictionary</a>
+          </div>
+        </div>
+
+        <div class="footer-col">
+          <h5>Documentation</h5>
+          <p style="font-size:12.5px;line-height:1.6;">
+            Autodesk Revit 2026<br>
+            Financial Modeling &amp; Labor Calculations<br>
+            Shop Drawing Review Cycles
+          </p>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <div>© 2026 Revit26 RoofTools Suite. Financial calculations are estimates for planning purposes.</div>
+        <div>Autodesk Revit is a registered trademark of Autodesk, Inc.</div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="js/app.js"></script>
+  <script src="js/calculators.js"></script>
+</body>
+</html>

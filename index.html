@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Revit26 RoofTools Suite — Commercial Roof Drainage Automation for Autodesk Revit 2026</title>
+  <meta name="description" content="Official portal for the Revit26 RoofTools Suite — AutoSlope by Point, RoofRidgeLines Voronoi Generator, and AutoSlope By Drain. Reduce roof modeling time by over 92%.">
+
+  <!-- Core Stylesheets -->
+  <link rel="stylesheet" href="css/design-system.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/pages.css">
+</head>
+<body>
+
+  <!-- ==================== HEADER & GLOBAL NAV ==================== -->
+  <header class="site-header">
+    <div class="wrap nav-container">
+      <a href="index.html" class="brand-logo">
+        <div class="brand-badge">⚡</div>
+        <div>
+          RoofTools<span class="suite-tag">REVIT 2026</span>
+        </div>
+      </a>
+
+      <nav class="nav-menu">
+        <a href="index.html" class="nav-link active">Suite Overview</a>
+
+        <div class="nav-dropdown">
+          <a href="#tools" class="nav-link">
+            Tools &amp; Plugins
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"></polyline></svg>
+          </a>
+          <div class="nav-dropdown-menu">
+            <a href="autoslope-by-point.html" class="dropdown-item">
+              <div class="item-title">AutoSlope by Point <span class="version-badge">V026</span></div>
+              <div class="item-desc">Dijkstra shortest-path point-by-point roof sloping</div>
+            </a>
+            <a href="roofridgelines.html" class="dropdown-item">
+              <div class="item-title">RoofRidgeLines <span class="version-badge">V67</span></div>
+              <div class="item-desc">Voronoi ridge &amp; valley generator for drain openings</div>
+            </a>
+            <a href="autoslope-by-drain.html" class="dropdown-item">
+              <div class="item-title">AutoSlope By Drain <span class="version-badge">V005</span></div>
+              <div class="item-desc">Sketch loop detection &amp; 14 shared Revit parameters</div>
+            </a>
+          </div>
+        </div>
+
+        <a href="simulator.html" class="nav-link">Live Sandbox</a>
+        <a href="roi-calculator.html" class="nav-link">ROI Calculator</a>
+        <a href="#parameters" class="nav-link">Parameters</a>
+      </nav>
+
+      <div class="nav-actions">
+        <button class="theme-toggle-btn" aria-label="Toggle Dark/Light Mode">
+          <!-- Populated by js/app.js -->
+        </button>
+        <a href="roi-calculator.html" class="btn btn-gold btn-sm">Calculate Savings</a>
+        <button class="mobile-toggle-btn" aria-label="Open Navigation Menu">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ==================== HERO SECTION ==================== -->
+  <section class="portal-hero">
+    <div class="wrap portal-hero-grid">
+      <div class="hero-content">
+        <div class="eyebrow gold">
+          <span class="dot"></span> Revit 2026 External Command Suite
+        </div>
+        <h1>
+          Complete Roof Drainage Automation for <span class="gradient-text">Autodesk Revit 2026</span>
+        </h1>
+        <p class="lead">
+          Replace tedious manual vertex elevation edits, geometric guesswork, and multi-pass shop drawing rework with algorithmic shortest-path Dijkstra graph routing and Voronoi ridge generation.
+        </p>
+
+        <div class="hero-actions">
+          <a href="#tools" class="btn btn-primary btn-lg">Explore Plugin Tools</a>
+          <a href="simulator.html" class="btn btn-ghost-white btn-lg">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polygon points="10 8 16 12 10 16 10 8"></polygon></svg>
+            Interactive Sandbox
+          </a>
+        </div>
+
+        <div class="hero-metrics-grid">
+          <div class="hero-metric-card">
+            <div class="num">92%–98%</div>
+            <div class="lbl">Time Reduction vs Manual</div>
+          </div>
+          <div class="hero-metric-card">
+            <div class="num">100+</div>
+            <div class="lbl">Roofs / Typical Large Project</div>
+          </div>
+          <div class="hero-metric-card">
+            <div class="num">&lt; 10s</div>
+            <div class="lbl">Algorithm Run Time</div>
+          </div>
+          <div class="hero-metric-card">
+            <div class="num">14</div>
+            <div class="lbl">Shared Revit Parameters</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Animated Visual Hero Canvas -->
+      <div class="hero-visual-card">
+        <div class="hero-canvas-container">
+          <canvas id="heroRoofCanvas"></canvas>
+          <div class="hero-canvas-overlay">
+            <div style="display:flex;align-items:center;gap:8px;">
+              <span class="dot-swatch green"></span>
+              <span>Dijkstra Shortest-Path &amp; Voronoi Ridge Engine</span>
+            </div>
+            <span style="font-family:var(--font-mono);font-weight:700;color:#9FC1FF;">LIVE ALGORITHM</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== SUITE MODULES SHOWCASE ==================== -->
+  <section class="section" id="tools">
+    <div class="wrap">
+      <div class="section-head">
+        <div class="eyebrow">Suite Architecture</div>
+        <h2 class="section-title">Three Specialized Engines for Every Drainage Need</h2>
+        <p class="section-desc">
+          Whether you need point-by-point slab shape editor elevation routing, Voronoi ridge line generation, or sketch loop opening auto-detection, the suite delivers end-to-end precision.
+        </p>
+      </div>
+
+      <div class="suite-modules-grid">
+        <!-- Module 1: AutoSlope by Point (V026) -->
+        <div class="module-card">
+          <div class="module-card-header">
+            <div class="module-tag-row">
+              <div class="module-icon-wrap">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"></circle><path d="M12 3v18M3 12h18"></path></svg>
+              </div>
+              <span class="module-version-tag">V026 · Point Sloper</span>
+            </div>
+            <h3>AutoSlope by Point</h3>
+            <p>Guided WPF tool inside Revit to pick roofs, pick drains, and slope vertices with Dijkstra shortest-path calculations.</p>
+          </div>
+
+          <div class="module-card-body">
+            <div class="module-stats-mini">
+              <div>
+                <div class="module-stat-val" style="color:var(--emerald);">92%</div>
+                <div class="module-stat-lbl">Time Saved</div>
+              </div>
+              <div>
+                <div class="module-stat-val">3–5 min</div>
+                <div class="module-stat-lbl">Run per Roof</div>
+              </div>
+            </div>
+
+            <div class="module-features-list">
+              <div class="module-feature-item">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                <span>Dijkstra path-to-drain engine</span>
+              </div>
+              <div class="module-feature-item">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                <span>Configurable mm drain tolerance detection</span>
+              </div>
+              <div class="module-feature-item">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                <span>Drain, high-point &amp; offset circle markers</span>
+              </div>
+              <div class="module-feature-item">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                <span>Multi-sheet Excel export (EPPlus.dll)</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="module-card-footer">
+            <a href="autoslope-by-point.html" class="btn btn-primary" style="width:100%;">
+              View AutoSlope by Point
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+            </a>
+          </div>
+        </div>
+
+        <!-- Module 2: RoofRidgeLines (V67) -->
+        <div class="module-card">
+          <div class="module-card-header">
+            <div class="module-tag-row">
+              <div class="module-icon-wrap" style="background:linear-gradient(135deg, #1B4F86, #2E86DE);">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4l16 16M4 20L20 4"></path></svg>
+              </div>
+              <span class="module-version-tag" style="color:#9FC1FF;background:rgba(91,141,239,0.15);border-color:rgba(91,141,239,0.35);">V67 · Voronoi Ridge</span>
+            </div>
+            <h3>RoofRidgeLines</h3>
+            <p>Computes equidistant Voronoi ridge and valley lines from drain openings, clipping to roof boundaries automatically.</p>
+          </div>
+
+          <div class="module-card-body">
+            <div class="module-stats-mini">
+              <div>
+                <div class="module-stat-val" style="color:var(--emerald);">96.7%</div>
+                <div class="module-stat-lbl">Time Saved</div>
+              </div>
+              <div>
+                <div class="module-stat-val">10 sec</div>
+                <div class="module-stat-lbl">Run per Roof</div>
+              </div>
+            </div>
+
+            <div class="module-features-list">
+              <div class="module-feature-item">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                <span>Automatic opening loop detection</span>
+              </div>
+              <div class="module-feature-item">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                <span>Voronoi proximity grouping &amp; sites</span>
+              </div>
+              <div class="module-feature-item">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                <span>Boundary clipping &amp; ridge midpoints</span>
+              </div>
+              <div class="module-feature-item">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                <span>Equidistance validation pass/fail check</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="module-card-footer">
+            <a href="roofridgelines.html" class="btn btn-primary" style="width:100%;">
+              View RoofRidgeLines
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+            </a>
+          </div>
+        </div>
+
+        <!-- Module 3: AutoSlope By Drain (V005) -->
+        <div class="module-card">
+          <div class="module-card-header">
+            <div class="module-tag-row">
+              <div class="module-icon-wrap" style="background:linear-gradient(135deg, #0E6B58, #16A085);">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a10 10 0 1 0 10 20 10 10 0 0 0-20z"></path><path d="M12 6v6l4 2"></path></svg>
+              </div>
+              <span class="module-version-tag" style="color:#2ECC71;background:rgba(46,204,113,0.15);border-color:rgba(46,204,113,0.35);">V005 · Drain Loop</span>
+            </div>
+            <h3>AutoSlope By Drain</h3>
+            <p>Sketch-based drain opening detection on FootPrintRoofs with direct shared parameter write-back and live metrics.</p>
+          </div>
+
+          <div class="module-card-body">
+            <div class="module-stats-mini">
+              <div>
+                <div class="module-stat-val" style="color:var(--emerald);">98.5%</div>
+                <div class="module-stat-lbl">Time Saved</div>
+              </div>
+              <div>
+                <div class="module-stat-val">1–2 min</div>
+                <div class="module-stat-lbl">Total Time</div>
+              </div>
+            </div>
+
+            <div class="module-features-list">
+              <div class="module-feature-item">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                <span>Auto-scans top face &amp; sketch loops</span>
+              </div>
+              <div class="module-feature-item">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                <span>Max edge &amp; path distance constraints</span>
+              </div>
+              <div class="module-feature-item">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                <span>Writes 14 shared Revit parameters</span>
+              </div>
+              <div class="module-feature-item">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                <span>Modeless external event execution</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="module-card-footer">
+            <a href="autoslope-by-drain.html" class="btn btn-primary" style="width:100%;">
+              View AutoSlope By Drain
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== CROSS-TOOL MATRIX ==================== -->
+  <section class="section band-alt">
+    <div class="wrap">
+      <div class="section-head">
+        <div class="eyebrow">Comparison Matrix</div>
+        <h2 class="section-title">Feature &amp; Capability Matrix</h2>
+        <p class="section-desc">
+          Compare core algorithmic capabilities, Revit element outputs, and export formats across the suite.
+        </p>
+      </div>
+
+      <div class="matrix-table-card">
+        <table class="matrix-table">
+          <thead>
+            <tr>
+              <th>Feature / Capability</th>
+              <th class="tool-header">AutoSlope by Point (V026)</th>
+              <th class="tool-header">RoofRidgeLines (V67)</th>
+              <th class="tool-header">AutoSlope By Drain (V005)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="feature-title">Primary Algorithm</td>
+              <td class="tool-cell">Dijkstra Shortest-Path Graph</td>
+              <td class="tool-cell">Voronoi Equidistant Diagram</td>
+              <td class="tool-cell">Dijkstra + Sketch Loop Scan</td>
+            </tr>
+            <tr>
+              <td class="feature-title">Drain Input Method</td>
+              <td class="tool-cell">User Picked Surface Points</td>
+              <td class="tool-cell">Opening Centroids (Inner Loops)</td>
+              <td class="tool-cell">Automatic Sketch-Loop Detection</td>
+            </tr>
+            <tr>
+              <td class="feature-title">Revit Element Outputs</td>
+              <td class="tool-cell">Slab Shape Vertices, Circle Markers</td>
+              <td class="tool-cell">Detail Lines &amp; Shape Points</td>
+              <td class="tool-cell">Slab Shape Vertices, Parameters</td>
+            </tr>
+            <tr>
+              <td class="feature-title">Curve &amp; Arc Handling</td>
+              <td class="tool-cell"><span style="color:var(--emerald);font-weight:700;">✓ Insert Intersections</span></td>
+              <td class="tool-cell"><span style="color:var(--emerald);font-weight:700;">✓ Boundary Clipping</span></td>
+              <td class="tool-cell"><span style="color:var(--emerald);font-weight:700;">✓ Arc Length Calculation</span></td>
+            </tr>
+            <tr>
+              <td class="feature-title">Revit Shared Parameters</td>
+              <td class="tool-cell">Written to Roof Element</td>
+              <td class="tool-cell">Pipeline Log Export</td>
+              <td class="tool-cell">14 Standardized Parameters</td>
+            </tr>
+            <tr>
+              <td class="feature-title">Excel Export Support</td>
+              <td class="tool-cell">Multi-sheet .xlsx (EPPlus)</td>
+              <td class="tool-cell">Pipeline Log Export</td>
+              <td class="tool-cell">Single Workbook Vertex Report</td>
+            </tr>
+            <tr>
+              <td class="feature-title">Typical Execution Speed</td>
+              <td class="tool-cell">3.1 seconds</td>
+              <td class="tool-cell">9.4 – 10 seconds</td>
+              <td class="tool-cell">842 ms (0.84s)</td>
+            </tr>
+            <tr>
+              <td class="feature-title">Time Reduction vs Manual</td>
+              <td class="tool-cell"><span class="tag-status green">92% Saved</span></td>
+              <td class="tool-cell"><span class="tag-status green">96.7% Saved</span></td>
+              <td class="tool-cell"><span class="tag-status green">98.5% Saved</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== SHARED PARAMETERS DIRECTORY ==================== -->
+  <section class="section" id="parameters">
+    <div class="wrap">
+      <div class="section-head">
+        <div class="eyebrow">Revit Parameter Dictionary</div>
+        <h2 class="section-title">Standardized Shared Parameters</h2>
+        <p class="section-desc">
+          Every algorithm run writes back complete metadata directly into Revit elements, making QA schedules, tags, and audit trails seamless.
+        </p>
+      </div>
+
+      <div class="param-search-bar">
+        <div class="search-input-wrap">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+          <input type="text" id="paramSearchInput" placeholder="Search parameters by name, description, or type...">
+        </div>
+        <div style="display:flex;gap:8px;">
+          <button class="param-filter-btn active" data-filter="all">All</button>
+          <button class="param-filter-btn" data-filter="number">Number</button>
+          <button class="param-filter-btn" data-filter="integer">Integer</button>
+          <button class="param-filter-btn" data-filter="text">Text</button>
+        </div>
+      </div>
+
+      <div class="param-grid" id="paramGrid">
+        <div class="param-card" data-name="AutoSlope_HighestElevation" data-desc="Highest elevation point on the roof slab relative to drains in millimeters" data-type="number">
+          <div class="param-card-head">
+            <span class="param-name">AutoSlope_HighestElevation</span>
+            <span class="param-badge">Number (mm)</span>
+          </div>
+          <p class="param-desc">Highest elevation point on the roof slab relative to drains in millimeters.</p>
+        </div>
+
+        <div class="param-card" data-name="AutoSlope_VerticesProcessed" data-desc="Count of vertices successfully routed to nearest drain" data-type="integer">
+          <div class="param-card-head">
+            <span class="param-name">AutoSlope_VerticesProcessed</span>
+            <span class="param-badge">Integer</span>
+          </div>
+          <p class="param-desc">Total count of roof slab shape vertices successfully elevated toward target drains.</p>
+        </div>
+
+        <div class="param-card" data-name="AutoSlope_VerticesSkipped" data-desc="Count of boundary vertices skipped outside threshold or offset" data-type="integer">
+          <div class="param-card-head">
+            <span class="param-name">AutoSlope_VerticesSkipped</span>
+            <span class="param-badge">Integer</span>
+          </div>
+          <p class="param-desc">Count of perimeter or opening vertices clamped to perimeter offset.</p>
+        </div>
+
+        <div class="param-card" data-name="AutoSlope_DrainCount" data-desc="Final number of active drain clusters used for calculation" data-type="integer">
+          <div class="param-card-head">
+            <span class="param-name">AutoSlope_DrainCount</span>
+            <span class="param-badge">Integer</span>
+          </div>
+          <p class="param-desc">Final number of active drain clusters or opening centroids utilized in the run.</p>
+        </div>
+
+        <div class="param-card" data-name="AutoSlope_RunDuration_sec" data-desc="Algorithm execution time in seconds" data-type="integer">
+          <div class="param-card-head">
+            <span class="param-name">AutoSlope_RunDuration_sec</span>
+            <span class="param-badge">Integer (s)</span>
+          </div>
+          <p class="param-desc">Time taken to complete the shortest-path graph calculation and model write-back.</p>
+        </div>
+
+        <div class="param-card" data-name="AutoSlope_LongestPath" data-desc="Longest vertex-to-drain Dijkstra path distance in meters" data-type="number">
+          <div class="param-card-head">
+            <span class="param-name">AutoSlope_LongestPath</span>
+            <span class="param-badge">Number (m)</span>
+          </div>
+          <p class="param-desc">Longest vertex-to-drain surface path distance computed on the roof.</p>
+        </div>
+
+        <div class="param-card" data-name="AutoSlope_SlopePercent" data-desc="Slope ratio applied (e.g. 0.015 for 1.5%)" data-type="number">
+          <div class="param-card-head">
+            <span class="param-name">AutoSlope_SlopePercent</span>
+            <span class="param-badge">Number</span>
+          </div>
+          <p class="param-desc">Numeric slope ratio applied (e.g., 0.010 for 1.00%, 0.015 for 1.50%).</p>
+        </div>
+
+        <div class="param-card" data-name="AutoSlope_SlopePercent_Text" data-desc="Human-readable slope text for annotations (e.g. 1.5%)" data-type="text">
+          <div class="param-card-head">
+            <span class="param-name">AutoSlope_SlopePercent_Text</span>
+            <span class="param-badge">Text</span>
+          </div>
+          <p class="param-desc">Human-readable formatted slope text suitable for direct view annotation tags.</p>
+        </div>
+
+        <div class="param-card" data-name="AutoSlope_Threshold" data-desc="Minimum elevation threshold applied in millimeters" data-type="number">
+          <div class="param-card-head">
+            <span class="param-name">AutoSlope_Threshold</span>
+            <span class="param-badge">Number (mm)</span>
+          </div>
+          <p class="param-desc">Minimum elevation threshold below which vertex modifications are clamped.</p>
+        </div>
+
+        <div class="param-card" data-name="AutoSlope_RunDate" data-desc="Timestamp of the algorithm run" data-type="text">
+          <div class="param-card-head">
+            <span class="param-name">AutoSlope_RunDate</span>
+            <span class="param-badge">Text</span>
+          </div>
+          <p class="param-desc">ISO timestamp recording exactly when the roof was sloped for QA version control.</p>
+        </div>
+
+        <div class="param-card" data-name="AutoSlope_Status" data-desc="Execution status code (1=OK, 2=Partial, 3=Failed)" data-type="integer">
+          <div class="param-card-head">
+            <span class="param-name">AutoSlope_Status</span>
+            <span class="param-badge">Integer</span>
+          </div>
+          <p class="param-desc">Transaction status code: 1 = Complete Success, 2 = Partial, 3 = Error/Rollback.</p>
+        </div>
+
+        <div class="param-card" data-name="AutoSlope_DrainToleranceMm" data-desc="Drain proximity grouping radius in millimeters" data-type="integer">
+          <div class="param-card-head">
+            <span class="param-name">AutoSlope_DrainToleranceMm</span>
+            <span class="param-badge">Integer (mm)</span>
+          </div>
+          <p class="param-desc">Radius tolerance used to cluster near-miss drain fixture placements.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== INTERACTIVE SANDBOX TEASER ==================== -->
+  <section class="section" style="background:var(--navy-deep);color:#fff;">
+    <div class="wrap">
+      <div class="portal-hero-grid">
+        <div>
+          <div class="eyebrow emerald">
+            <span class="dot"></span> Real-Time Browser Sandbox
+          </div>
+          <h2 style="font-size:36px;color:#fff;margin-bottom:16px;">Test the Algorithms in Your Browser</h2>
+          <p style="color:rgba(235,242,250,0.8);font-size:16px;line-height:1.6;margin-bottom:28px;">
+            Place drains on custom roof geometries, view real-time Voronoi ridge line generation, inspect Dijkstra distance fields, and test slope percentage calculations live.
+          </p>
+          <a href="simulator.html" class="btn btn-gold btn-lg">Launch Interactive Simulator</a>
+        </div>
+        <div style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);border-radius:var(--radius-xl);padding:24px;text-align:center;">
+          <div style="font-size:13px;color:rgba(255,255,255,0.7);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:12px;">Preset Geometries Supported</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;text-align:left;">
+            <div style="background:rgba(255,255,255,0.05);padding:12px;border-radius:8px;">
+              <b style="color:#fff;display:block;">Rectangle Roof</b>
+              <span style="font-size:12px;color:rgba(255,255,255,0.6);">40m × 24m with 3 Drains</span>
+            </div>
+            <div style="background:rgba(255,255,255,0.05);padding:12px;border-radius:8px;">
+              <b style="color:#fff;display:block;">L-Shaped Facility</b>
+              <span style="font-size:12px;color:rgba(255,255,255,0.6);">Corner Wing Geometry</span>
+            </div>
+            <div style="background:rgba(255,255,255,0.05);padding:12px;border-radius:8px;">
+              <b style="color:#fff;display:block;">Courtyard Skylights</b>
+              <span style="font-size:12px;color:rgba(255,255,255,0.6);">2 Cutout Openings</span>
+            </div>
+            <div style="background:rgba(255,255,255,0.05);padding:12px;border-radius:8px;">
+              <b style="color:#fff;display:block;">Voronoi Bisectors</b>
+              <span style="font-size:12px;color:rgba(255,255,255,0.6);">Equidistant Valley Ridges</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== FOOTER ==================== -->
+  <footer class="site-footer">
+    <div class="wrap">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <h4>⚡ Revit26 RoofTools Suite</h4>
+          <p>
+            Algorithmic shortest-path drainage slopes and Voronoi ridge generation for Autodesk Revit 2026. Built for high-volume commercial BIM workflows.
+          </p>
+        </div>
+
+        <div class="footer-col">
+          <h5>Tools &amp; Plugins</h5>
+          <div class="footer-links">
+            <a href="autoslope-by-point.html">AutoSlope by Point V026</a>
+            <a href="roofridgelines.html">RoofRidgeLines V67</a>
+            <a href="autoslope-by-drain.html">AutoSlope By Drain V005</a>
+          </div>
+        </div>
+
+        <div class="footer-col">
+          <h5>Interactive Tools</h5>
+          <div class="footer-links">
+            <a href="simulator.html">Live 2D Roof Simulator</a>
+            <a href="roi-calculator.html">Executive ROI Calculator</a>
+            <a href="#parameters">Parameters Dictionary</a>
+          </div>
+        </div>
+
+        <div class="footer-col">
+          <h5>Compatibility</h5>
+          <p style="font-size:12.5px;line-height:1.6;">
+            Autodesk Revit 2026<br>
+            .NET Framework / WPF external commands<br>
+            EPPlus (OfficeOpenXml) Excel support<br>
+            FootPrintRoof Slab Shape Editor
+          </p>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <div>© 2026 Revit26 RoofTools Plugin Suite. Independent tool documentation.</div>
+        <div>Autodesk Revit is a registered trademark of Autodesk, Inc.</div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="js/app.js"></script>
+  <script src="js/calculators.js"></script>
+</body>
+</html>

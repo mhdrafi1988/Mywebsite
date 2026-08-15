@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AutoSlope by Point V026 — Dijkstra Roof Sloping Plugin for Autodesk Revit 2026</title>
+  <meta name="description" content="Automatically slopes footprint roof vertices toward selected drains using shortest-path Dijkstra geometry in Autodesk Revit 2026.">
+
+  <!-- Core Stylesheets -->
+  <link rel="stylesheet" href="css/design-system.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/pages.css">
+</head>
+<body>
+
+  <!-- ==================== HEADER & GLOBAL NAV ==================== -->
+  <header class="site-header">
+    <div class="wrap nav-container">
+      <a href="index.html" class="brand-logo">
+        <div class="brand-badge">⚡</div>
+        <div>
+          RoofTools<span class="suite-tag">REVIT 2026</span>
+        </div>
+      </a>
+
+      <nav class="nav-menu">
+        <a href="index.html" class="nav-link">Suite Overview</a>
+
+        <div class="nav-dropdown">
+          <a href="#showcase" class="nav-link active">
+            AutoSlope by Point <span class="version-badge" style="margin-left:4px;">V026</span>
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"></polyline></svg>
+          </a>
+          <div class="nav-dropdown-menu">
+            <a href="autoslope-by-point.html" class="dropdown-item">
+              <div class="item-title">AutoSlope by Point <span class="version-badge">V026</span></div>
+              <div class="item-desc">Dijkstra shortest-path point-by-point roof sloping</div>
+            </a>
+            <a href="roofridgelines.html" class="dropdown-item">
+              <div class="item-title">RoofRidgeLines <span class="version-badge">V67</span></div>
+              <div class="item-desc">Voronoi ridge &amp; valley generator for drain openings</div>
+            </a>
+            <a href="autoslope-by-drain.html" class="dropdown-item">
+              <div class="item-title">AutoSlope By Drain <span class="version-badge">V005</span></div>
+              <div class="item-desc">Sketch loop detection &amp; 14 shared Revit parameters</div>
+            </a>
+          </div>
+        </div>
+
+        <a href="#compare" class="nav-link">Time Comparison</a>
+        <a href="#report" class="nav-link">Excel Export</a>
+        <a href="simulator.html" class="nav-link">Live Sandbox</a>
+        <a href="roi-calculator.html" class="nav-link">ROI Calculator</a>
+      </nav>
+
+      <div class="nav-actions">
+        <button class="theme-toggle-btn" aria-label="Toggle Dark/Light Mode"></button>
+        <a href="roi-calculator.html" class="btn btn-gold btn-sm">Calculate Savings</a>
+        <button class="mobile-toggle-btn" aria-label="Open Navigation Menu">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ==================== TOP METRICS BAND ==================== -->
+  <div class="metrics-band">
+    <div class="wrap">
+      <div class="metrics-band-head">
+        <div class="eyebrow gold">Plugin UI — Post-Run Metrics</div>
+        <p>Real-time results captured from the AutoSlope WPF results panel immediately after a sample run.</p>
+      </div>
+      <div class="mb-grid">
+        <div class="mb-card c1"><div class="mb-lbl">Longest Path</div><div class="mb-val">4.82 m</div></div>
+        <div class="mb-card c2"><div class="mb-lbl">Highest Elevation</div><div class="mb-val">48 mm</div></div>
+        <div class="mb-card c3"><div class="mb-lbl">Percentage Applied</div><div class="mb-val">1.00%</div></div>
+        <div class="mb-card c4"><div class="mb-lbl">Run Duration</div><div class="mb-val">3.1 s</div></div>
+        <div class="mb-card c5"><div class="mb-lbl">Tolerance Applied</div><div class="mb-val">50 mm</div></div>
+        <div class="mb-card c6"><div class="mb-lbl">Vertices Processed</div><div class="mb-val">212</div></div>
+        <div class="mb-card c7"><div class="mb-lbl">Vertices Skipped</div><div class="mb-val">8</div></div>
+        <div class="mb-card c8"><div class="mb-lbl">Picked Drain</div><div class="mb-val">3</div></div>
+        <div class="mb-card c9"><div class="mb-lbl">Final Drain Count</div><div class="mb-val">3</div></div>
+        <div class="mb-card c10"><div class="mb-lbl">Curves Calculated</div><div class="mb-val">6</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== HERO SECTION ==================== -->
+  <header class="hero">
+    <div class="wrap">
+      <div class="hero-content">
+        <div class="eyebrow gold">Revit26 Plugin Suite · Slab Shape Editor Tool</div>
+        <h1>AutoSlope by Point <span class="gradient-text">V026</span></h1>
+        <p class="lead">
+          Automatically slopes footprint roof vertices toward selected drains using shortest-path Dijkstra geometry — replacing manual point-by-point elevation edits with a single guided run.
+        </p>
+
+        <div class="hero-metrics-grid">
+          <div class="hero-metric-card">
+            <div class="num">100+</div>
+            <div class="lbl">Roofs / Large Project</div>
+          </div>
+          <div class="hero-metric-card">
+            <div class="num" id="heroPct" style="color:var(--emerald);">92%</div>
+            <div class="lbl">Time Reduction vs Manual</div>
+          </div>
+          <div class="hero-metric-card">
+            <div class="num">1 pass</div>
+            <div class="lbl">Typical Rework (Base Case)</div>
+          </div>
+          <div class="hero-metric-card">
+            <div class="num">3.1 s</div>
+            <div class="lbl">Dijkstra Run Time</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ==================== COMPARISON STRIP ==================== -->
+  <div class="strip">
+    <div class="wrap strip-inner">
+      <div class="strip-stats">
+        <div class="strip-stat">
+          <span class="dot-swatch red"></span> Manual Process: <b id="stripManual">33.3 hrs</b>
+        </div>
+        <div class="strip-stat">
+          <span class="dot-swatch green"></span> AutoSlope Plugin: <b id="stripPlugin">2.7 hrs</b>
+        </div>
+      </div>
+      <div class="strip-cta">
+        <span class="strip-reduction-pill" id="stripReduction">↓ 92% time saved</span>
+        <a class="strip-link" href="#compare">
+          See full model breakdown
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"></polyline></svg>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== TOOL SHOWCASE ==================== -->
+  <section class="section" id="showcase">
+    <div class="wrap">
+      <div class="section-head">
+        <div class="eyebrow">Core Features</div>
+        <h2 class="section-title">What AutoSlope by Point Does</h2>
+        <p class="section-desc">
+          A guided WPF tool inside Revit: pick a footprint roof, pick drains, set slope parameters — the engine computes graph pathing, vertex elevations, circle markers, and full reports.
+        </p>
+      </div>
+
+      <div class="grid-features">
+        <div class="feat-card">
+          <div class="feat-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"></circle><path d="M12 3v18M3 12h18"></path></svg>
+          </div>
+          <h4>Dijkstra Path-to-Drain Engine</h4>
+          <p>Builds a shortest-path graph across roof shape vertices and boundary edges, computing true surface distance from every vertex to its nearest drain.</p>
+        </div>
+
+        <div class="feat-card">
+          <div class="feat-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4l16 16M4 20L20 4"></path></svg>
+          </div>
+          <h4>Curve Intersection Handling</h4>
+          <p>Optionally inserts real vertices where straight roof edges meet arc boundaries or openings, ensuring curved drains and skylights slope accurately.</p>
+        </div>
+
+        <div class="feat-card">
+          <div class="feat-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v6l4 2"></path><circle cx="12" cy="12" r="9"></circle></svg>
+          </div>
+          <h4>Drain Tolerance Detection</h4>
+          <p>Expands each picked drain point to catch nearby shape points within a configurable millimeter radius, preventing missed matches from imprecise picks.</p>
+        </div>
+
+        <div class="feat-card">
+          <div class="feat-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"></circle><circle cx="6" cy="6" r="2"></circle><circle cx="18" cy="18" r="2"></circle></svg>
+          </div>
+          <h4>Circle Marker Placement</h4>
+          <p>Places configurable drain, highest-point, and allowed-offset circle markers directly in the active view, with per-group line style, color, and radius.</p>
+        </div>
+
+        <div class="feat-card">
+          <div class="feat-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 20h16M4 4h16M4 12h10"></path></svg>
+          </div>
+          <h4>Roof Parameter Write-Back</h4>
+          <p>Writes run results — longest path, highest elevation, vertex counts, tolerance, run date/duration — directly onto the roof element's parameters.</p>
+        </div>
+
+        <div class="feat-card">
+          <div class="feat-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2h9l5 5v15H6z"></path><path d="M14 2v6h6"></path></svg>
+          </div>
+          <h4>Compact + Detailed Excel Export</h4>
+          <p>Exports a compact summary and a detailed multi-sheet workbook (Summary / Drain Points / Vertices / Statistics) using EPPlus.dll for shop drawing records.</p>
+        </div>
+      </div>
+
+      <div style="height:64px;"></div>
+
+      <div class="section-head">
+        <div class="eyebrow">5-Step Pipeline</div>
+        <h2 class="section-title">From Roof Selection to Sloped Geometry</h2>
+      </div>
+
+      <div class="steps-container">
+        <div class="step-card">
+          <div class="step-num-badge">1</div>
+          <h4>Select Roof</h4>
+          <p>Pick a footprint roof; slab shape editing is enabled in a rollback-safe transaction group.</p>
+        </div>
+        <div class="step-card">
+          <div class="step-num-badge">2</div>
+          <h4>Pick Drains</h4>
+          <p>Click drain points on the roof surface; picks outside the roof are rejected automatically.</p>
+        </div>
+        <div class="step-card">
+          <div class="step-num-badge">3</div>
+          <h4>Set Parameters</h4>
+          <p>Enter slope %, distance threshold, drain tolerance, and marker styling in the WPF window.</p>
+        </div>
+        <div class="step-card">
+          <div class="step-num-badge">4</div>
+          <h4>Run Engine</h4>
+          <p>Dijkstra computes path length per vertex; elevations and markers are committed in one transaction.</p>
+        </div>
+        <div class="step-card">
+          <div class="step-num-badge">5</div>
+          <h4>Export Report</h4>
+          <p>Compact and multi-sheet Excel workbooks are generated with auto-open capabilities.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== UI MOCKUP & REQUIREMENTS ==================== -->
+  <section class="section band-alt">
+    <div class="wrap">
+      <div class="two-col-layout">
+        <!-- Interactive UI Mockup Window -->
+        <div class="panel-window">
+          <div class="panel-header">
+            <div style="display:flex;align-items:center;gap:8px;">
+              <div class="panel-dots"><span></span><span></span><span></span></div>
+              <span>Auto Slope Engine — Revit 2026</span>
+            </div>
+            <span style="font-family:var(--font-mono);font-size:11px;color:var(--gold);">V026</span>
+          </div>
+          <div class="panel-body" style="padding:0;background:#F7FAFD;">
+            <svg viewBox="0 0 560 400" xmlns="http://www.w3.org/2000/svg" style="display:block;width:100%;height:auto;">
+              <rect x="0" y="0" width="560" height="400" fill="#F7FAFD"/>
+              <!-- App identity -->
+              <rect x="18" y="16" width="524" height="40" rx="8" fill="#1E3A5F"/>
+              <text x="34" y="41" fill="#fff" font-size="14" font-family="Segoe UI, Arial" font-weight="700">AutoSlope by Point</text>
+              <text x="470" y="41" fill="#C9A24B" font-size="11" font-family="Segoe UI, Arial">V026</text>
+              <!-- Slope section -->
+              <text x="18" y="76" fill="#1E3A5F" font-size="12" font-weight="700" font-family="Segoe UI, Arial">SLOPE</text>
+              <rect x="18" y="82" width="524" height="1" fill="#DDE5EF"/>
+              <text x="18" y="102" fill="#5C7089" font-size="10.5" font-family="Segoe UI, Arial">Percentage</text>
+              <rect x="18" y="108" width="250" height="28" rx="6" fill="#fff" stroke="#DDE5EF"/>
+              <text x="30" y="126" fill="#152437" font-size="12" font-family="Segoe UI, Arial">1.00 %</text>
+              <text x="292" y="102" fill="#5C7089" font-size="10.5" font-family="Segoe UI, Arial">Threshold (m)</text>
+              <rect x="292" y="108" width="250" height="28" rx="6" fill="#fff" stroke="#DDE5EF"/>
+              <text x="304" y="126" fill="#152437" font-size="12" font-family="Segoe UI, Arial">1</text>
+              <!-- Drain detection -->
+              <text x="18" y="160" fill="#1E3A5F" font-size="12" font-weight="700" font-family="Segoe UI, Arial">DRAIN DETECTION</text>
+              <rect x="18" y="166" width="524" height="1" fill="#DDE5EF"/>
+              <text x="18" y="186" fill="#5C7089" font-size="10.5" font-family="Segoe UI, Arial">Tolerance</text>
+              <rect x="18" y="192" width="120" height="24" rx="12" fill="#27AE60"/>
+              <circle cx="128" cy="204" r="9" fill="#fff"/>
+              <text x="292" y="186" fill="#5C7089" font-size="10.5" font-family="Segoe UI, Arial">Radius (mm)</text>
+              <rect x="292" y="192" width="250" height="24" rx="6" fill="#fff" stroke="#DDE5EF"/>
+              <text x="304" y="208" fill="#152437" font-size="11.5" font-family="Segoe UI, Arial">50</text>
+              <!-- Circle markers -->
+              <text x="18" y="244" fill="#1E3A5F" font-size="12" font-weight="700" font-family="Segoe UI, Arial">CIRCLE MARKERS</text>
+              <rect x="18" y="250" width="524" height="1" fill="#DDE5EF"/>
+              <text x="18" y="270" fill="#5C7089" font-size="10.5" font-family="Segoe UI, Arial">Line Style</text>
+              <rect x="18" y="276" width="160" height="24" rx="6" fill="#fff" stroke="#DDE5EF"/>
+              <text x="200" y="270" fill="#5C7089" font-size="10.5" font-family="Segoe UI, Arial">Color</text>
+              <rect x="200" y="276" width="120" height="24" rx="6" fill="#fff" stroke="#DDE5EF"/>
+              <circle cx="212" cy="288" r="6" fill="#1E3A5F"/>
+              <text x="360" y="270" fill="#5C7089" font-size="10.5" font-family="Segoe UI, Arial">Radius (mm)</text>
+              <rect x="360" y="276" width="182" height="24" rx="6" fill="#fff" stroke="#DDE5EF"/>
+              <!-- Metrics row -->
+              <rect x="18" y="316" width="524" height="56" rx="8" fill="#1E3A5F"/>
+              <text x="34" y="336" fill="rgba(255,255,255,0.65)" font-size="9.5" font-family="Segoe UI, Arial">LONGEST PATH</text>
+              <text x="34" y="356" fill="#fff" font-size="15" font-weight="700" font-family="Segoe UI, Arial">4.82 m</text>
+              <text x="184" y="336" fill="rgba(255,255,255,0.65)" font-size="9.5" font-family="Segoe UI, Arial">HIGHEST ELEV.</text>
+              <text x="184" y="356" fill="#fff" font-size="15" font-weight="700" font-family="Segoe UI, Arial">48 mm</text>
+              <text x="334" y="336" fill="rgba(255,255,255,0.65)" font-size="9.5" font-family="Segoe UI, Arial">VERTICES</text>
+              <text x="334" y="356" fill="#fff" font-size="15" font-weight="700" font-family="Segoe UI, Arial">212 / 8</text>
+              <text x="460" y="336" fill="rgba(255,255,255,0.65)" font-size="9.5" font-family="Segoe UI, Arial">RUN TIME</text>
+              <text x="460" y="356" fill="#C9A24B" font-size="15" font-weight="700" font-family="Segoe UI, Arial">3.1 s</text>
+            </svg>
+          </div>
+          <div class="panel-footer">
+            Generated from the plugin's field layout (Slope %, Drain Detection, Circle Markers, Post-Run Metrics).
+          </div>
+        </div>
+
+        <!-- Requirements & Compatibility Panel -->
+        <div class="panel-window">
+          <div class="panel-header">
+            <span>Requirements &amp; Compatibility</span>
+            <span style="color:var(--emerald);font-weight:700;">Revit 2026</span>
+          </div>
+          <div class="panel-body">
+            <div class="req-grid">
+              <div class="req-item">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                <span>Autodesk Revit 2026 (64-bit)</span>
+              </div>
+              <div class="req-item">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                <span>Footprint roof with shape-editable slab</span>
+              </div>
+              <div class="req-item">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                <span>EPPlus.dll in plugin folder (Excel engine)</span>
+              </div>
+              <div class="req-item">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                <span>.NET 8.0 / WPF External Command</span>
+              </div>
+              <div class="req-item">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                <span>Manual Transaction Mode (Safe rollback)</span>
+              </div>
+              <div class="req-item">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                <span>Persisted per-user settings.json</span>
+              </div>
+            </div>
+          </div>
+          <div class="panel-footer">
+            Compiled from: Commands, Models/AutoSlopeSettings.cs, Helpers/ExcelExportService.cs.
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== TIME COMPARISON & RADIAL GAUGES ==================== -->
+  <section class="section" id="compare">
+    <div class="wrap">
+      <div class="section-head">
+        <div class="eyebrow">Manual vs Plugin Model</div>
+        <h2 class="section-title">Time Comparison Across Project Scale</h2>
+        <p class="section-desc">
+          Based on a confirmed manual sloping rate of 20 sec/point and plugin execution scaling from 3–5 min/roof across 100 roofs.
+        </p>
+      </div>
+
+      <!-- Point Tier Switcher -->
+      <div class="toggle-row">
+        <button class="toggle-pill-btn" data-tier-point="200">200 pts / roof (Small)</button>
+        <button class="toggle-pill-btn active" data-tier-point="400">400 pts / roof (Medium)</button>
+        <button class="toggle-pill-btn" data-tier-point="500">500 pts / roof (Large)</button>
+      </div>
+
+      <!-- 4 Stat Metric Cards -->
+      <div class="stats-summary-grid">
+        <div class="stat-metric-card">
+          <div class="num" id="sMan" style="color:var(--danger)">33.3 hrs</div>
+          <div class="lbl">Total Manual Time (100 roofs)</div>
+        </div>
+        <div class="stat-metric-card">
+          <div class="num" id="sPlug" style="color:var(--emerald)">2.7 hrs</div>
+          <div class="lbl">Total Plugin Time (100 roofs)</div>
+        </div>
+        <div class="stat-metric-card">
+          <div class="num" id="sSaved">30.6 hrs</div>
+          <div class="lbl">Direct Hours Saved</div>
+        </div>
+        <div class="stat-metric-card highlight">
+          <div class="num" id="sPct">92%</div>
+          <div class="lbl">Reduction in Effort</div>
+        </div>
+      </div>
+
+      <!-- Dual SVG Ring Gauges -->
+      <div class="rings-container">
+        <div class="ring-col">
+          <div class="ring-title">
+            <span class="dot-swatch red"></span> Manual Process
+          </div>
+          <svg width="220" height="220" viewBox="0 0 220 220">
+            <circle cx="110" cy="110" r="92" fill="none" stroke="rgba(231,76,60,0.15)" stroke-width="18"/>
+            <circle id="ringManual" cx="110" cy="110" r="92" fill="none" stroke="#E74C3C" stroke-width="18"
+                    stroke-linecap="round" transform="rotate(-90 110 110)"/>
+            <text x="110" y="106" text-anchor="middle" font-size="28" font-weight="800" fill="var(--text-main)" font-family="Space Grotesk, sans-serif" id="ringManualLabel">33.3h</text>
+            <text x="110" y="128" text-anchor="middle" font-size="12" fill="var(--text-muted)" font-family="Inter, sans-serif">per 100 roofs</text>
+          </svg>
+          <div class="ring-time-val" id="ringManualBig">33.3 <span>hrs</span></div>
+          <div class="ring-subtext" id="ringManualSub">incl. up to 5 full rework passes (worst case)</div>
+        </div>
+
+        <div class="ring-col">
+          <div class="ring-title">
+            <span class="dot-swatch green"></span> AutoSlope Plugin
+          </div>
+          <svg width="220" height="220" viewBox="0 0 220 220">
+            <circle cx="110" cy="110" r="92" fill="none" stroke="rgba(39,174,96,0.15)" stroke-width="18"/>
+            <circle id="ringPlugin" cx="110" cy="110" r="92" fill="none" stroke="#27AE60" stroke-width="18"
+                    stroke-linecap="round" transform="rotate(-90 110 110)"/>
+            <text x="110" y="106" text-anchor="middle" font-size="28" font-weight="800" fill="var(--text-main)" font-family="Space Grotesk, sans-serif" id="ringPluginLabel">2.7h</text>
+            <text x="110" y="128" text-anchor="middle" font-size="12" fill="var(--text-muted)" font-family="Inter, sans-serif">per 100 roofs</text>
+          </svg>
+          <div class="ring-time-val" id="ringPluginBig">2.7 <span>hrs</span></div>
+          <div class="ring-subtext" id="ringPluginSub">incl. 1 rework pass at as-built stage (base case)</div>
+        </div>
+      </div>
+
+      <!-- Breakdown Table -->
+      <div class="breakdown-table-wrap">
+        <table class="breakdown-table">
+          <thead>
+            <tr>
+              <th>Metric</th>
+              <th>Manual Process</th>
+              <th>AutoSlope Plugin</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Rate per Unit</td>
+              <td class="num">20 sec / point</td>
+              <td class="num" id="tPlugRate">4 min / roof</td>
+            </tr>
+            <tr>
+              <td>Base Time (100 roofs)</td>
+              <td class="num" id="tManBase">22.2 hrs</td>
+              <td class="num" id="tPlugBase">6.7 hrs</td>
+            </tr>
+            <tr>
+              <td>Rework Multiplier</td>
+              <td><span class="tag-status red">● up to 5 full re-dos (worst case)</span></td>
+              <td><span class="tag-status green">● 1 pass, as-built (base case)</span></td>
+            </tr>
+            <tr>
+              <td>Rework Time Added</td>
+              <td class="num" id="tManRework">x5 passes → 33.3 hrs total</td>
+              <td class="num" id="tPlugRework">x2 passes → 2.7 hrs total</td>
+            </tr>
+            <tr style="font-weight:800;background:var(--bg-subtle);">
+              <td>Total Time (100 roofs)</td>
+              <td class="num" id="tManTotal" style="color:var(--danger);">33.3 hrs</td>
+              <td class="num" id="tPlugTotal" style="color:var(--emerald);">2.7 hrs</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Assumptions -->
+      <div class="assumptions-box">
+        <h4>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+          Modeling Assumptions &amp; Notes
+        </h4>
+        <ul>
+          <li><strong>Manual rate:</strong> 20 sec/point (derived from 1 hour to manually slope a 200-point roof with multiple openings/drains).</li>
+          <li><strong>Plugin run time:</strong> Linear interpolation across 200–500 pt roofs → 3 / 4 / 5 minutes per roof respectively.</li>
+          <li><strong>Manual rework:</strong> Modeled as up to 5 full rework passes (each a full re-do) prior to shop drawing submission — worst-case headline figure.</li>
+          <li><strong>Plugin rework:</strong> Modeled with 1 rework pass at the as-built stage as the base case.</li>
+          <li><strong>Item volume:</strong> 100 roofs assumed as a representative large commercial project.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== INTERACTIVE EXCEL EXPORT SAMPLE ==================== -->
+  <section class="section band-alt" id="report">
+    <div class="wrap">
+      <div class="section-head">
+        <div class="eyebrow">Excel Export Service</div>
+        <h2 class="section-title">Detailed Multi-Sheet Excel Workbook</h2>
+        <p class="section-desc">
+          Every run exports a comprehensive QA workbook. Click the sheet tabs below to inspect Vertex Data, Run Summary, Drain Points, and Statistical Distributions.
+        </p>
+      </div>
+
+      <!-- Excel Window Mockup -->
+      <div class="xl-window">
+        <div class="xl-titlebar">
+          <div class="xl-title-left">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><rect x="2" y="2" width="20" height="20" rx="3" fill="#1D6F42"/><path d="M6.5 7l3.2 5-3.2 5h2.3l2.1-3.5L13 17h2.3l-3.2-5 3.2-5h-2.3l-2 3.4L8.8 7H6.5z" fill="#fff"/></svg>
+            <span>AutoSlope_Roof0142_1.00_140826.xlsx</span>
+          </div>
+          <div class="xl-title-right">
+            <span class="xl-ribbon-dot"></span><span class="xl-ribbon-dot"></span><span class="xl-ribbon-dot"></span>
+          </div>
+        </div>
+
+        <div class="xl-ribbon">
+          <div class="xl-tab active">Home</div>
+          <div class="xl-tab">Insert</div>
+          <div class="xl-tab">Page Layout</div>
+          <div class="xl-tab">Formulas</div>
+          <div class="xl-tab">Data</div>
+          <div class="xl-tab">Review</div>
+          <div class="xl-tab">View</div>
+        </div>
+
+        <div class="xl-formulabar">
+          <div class="xl-namebox">A1</div>
+          <div class="xl-fx">fx</div>
+          <div class="xl-fxcontent">AUTOSLOPE — VERTEX DATA</div>
+        </div>
+
+        <div class="xl-gridwrap">
+          <!-- Populated by js/excel-viewer.js -->
+        </div>
+
+        <div class="xl-sheettabs">
+          <div class="xl-sheettab active" data-sheet="vertex-data">Vertex Data</div>
+          <div class="xl-sheettab" data-sheet="run-summary">Run Summary</div>
+          <div class="xl-sheettab" data-sheet="drain-points">Drain Points</div>
+          <div class="xl-sheettab" data-sheet="statistics">Statistics</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== FOOTER ==================== -->
+  <footer class="site-footer">
+    <div class="wrap">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <h4>⚡ AutoSlope by Point V026</h4>
+          <p>
+            Dijkstra shortest-path roof slab shape editor automation for Autodesk Revit 2026.
+          </p>
+        </div>
+
+        <div class="footer-col">
+          <h5>Tools in Suite</h5>
+          <div class="footer-links">
+            <a href="autoslope-by-point.html">AutoSlope by Point V026</a>
+            <a href="roofridgelines.html">RoofRidgeLines V67</a>
+            <a href="autoslope-by-drain.html">AutoSlope By Drain V005</a>
+          </div>
+        </div>
+
+        <div class="footer-col">
+          <h5>Interactive Tools</h5>
+          <div class="footer-links">
+            <a href="simulator.html">Live 2D Roof Simulator</a>
+            <a href="roi-calculator.html">Executive ROI Calculator</a>
+            <a href="index.html#parameters">Parameters Dictionary</a>
+          </div>
+        </div>
+
+        <div class="footer-col">
+          <h5>Documentation</h5>
+          <p style="font-size:12.5px;line-height:1.6;">
+            Autodesk Revit 2026<br>
+            Internal Tooling &amp; Efficiency Report<br>
+            OfficeOpenXml EPPlus Export
+          </p>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <div>© 2026 Revit26_Plugin · AutoSlope by Point V026. Internal tool documentation.</div>
+        <div>Autodesk Revit is a registered trademark of Autodesk, Inc.</div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="js/app.js"></script>
+  <script src="js/calculators.js"></script>
+  <script src="js/excel-viewer.js"></script>
+</body>
+</html>

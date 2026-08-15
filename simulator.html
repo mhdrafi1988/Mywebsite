@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Interactive 2D Roof Simulator — Revit26 RoofTools Suite</title>
+  <meta name="description" content="Interactive browser-based Voronoi ridge line generator and Dijkstra shortest-path drainage slope simulator for Autodesk Revit 2026.">
+
+  <!-- Core Stylesheets -->
+  <link rel="stylesheet" href="css/design-system.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/pages.css">
+</head>
+<body>
+
+  <!-- ==================== HEADER & GLOBAL NAV ==================== -->
+  <header class="site-header">
+    <div class="wrap nav-container">
+      <a href="index.html" class="brand-logo">
+        <div class="brand-badge">⚡</div>
+        <div>
+          RoofTools<span class="suite-tag">REVIT 2026</span>
+        </div>
+      </a>
+
+      <nav class="nav-menu">
+        <a href="index.html" class="nav-link">Suite Overview</a>
+
+        <div class="nav-dropdown">
+          <a href="#" class="nav-link">
+            Tools &amp; Plugins
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"></polyline></svg>
+          </a>
+          <div class="nav-dropdown-menu">
+            <a href="autoslope-by-point.html" class="dropdown-item">
+              <div class="item-title">AutoSlope by Point <span class="version-badge">V026</span></div>
+              <div class="item-desc">Dijkstra shortest-path point-by-point roof sloping</div>
+            </a>
+            <a href="roofridgelines.html" class="dropdown-item">
+              <div class="item-title">RoofRidgeLines <span class="version-badge">V67</span></div>
+              <div class="item-desc">Voronoi ridge &amp; valley generator for drain openings</div>
+            </a>
+            <a href="autoslope-by-drain.html" class="dropdown-item">
+              <div class="item-title">AutoSlope By Drain <span class="version-badge">V005</span></div>
+              <div class="item-desc">Sketch loop detection &amp; 14 shared Revit parameters</div>
+            </a>
+          </div>
+        </div>
+
+        <a href="simulator.html" class="nav-link active">Live Sandbox</a>
+        <a href="roi-calculator.html" class="nav-link">ROI Calculator</a>
+        <a href="index.html#parameters" class="nav-link">Parameters</a>
+      </nav>
+
+      <div class="nav-actions">
+        <button class="theme-toggle-btn" aria-label="Toggle Dark/Light Mode"></button>
+        <a href="roi-calculator.html" class="btn btn-gold btn-sm">Calculate Savings</a>
+        <button class="mobile-toggle-btn" aria-label="Open Navigation Menu">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ==================== PAGE HEADER ==================== -->
+  <section class="section" style="padding:48px 0 24px;">
+    <div class="wrap">
+      <div class="section-head left-aligned" style="margin-bottom:24px;">
+        <div class="eyebrow emerald">
+          <span class="dot"></span> Real-Time Browser Sandbox
+        </div>
+        <h1 class="section-title">Interactive Roof Sloping &amp; Voronoi Ridge Simulator</h1>
+        <p class="section-desc">
+          Click anywhere inside the roof polygon to add drain seeds. Drag existing drains to see Voronoi ridge bisectors, shortest-path Dijkstra distance fields, and elevation contours recalculate in real time.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== SIMULATOR MAIN WORKSPACE ==================== -->
+  <section class="section" style="padding-top:0;">
+    <div class="wrap">
+      <div class="sim-container">
+
+        <!-- Controls Sidebar -->
+        <div class="sim-sidebar">
+          <h3 style="font-size:16px;margin-bottom:16px;display:flex;align-items:center;gap:8px;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+            Geometry &amp; Presets
+          </h3>
+
+          <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:24px;">
+            <button class="param-filter-btn active" data-sim-preset="rectangle" style="text-align:left;">
+              <b>Rectangular Roof</b><br><span style="font-size:11px;font-weight:400;color:var(--text-muted);">40m × 24m Standard Commercial</span>
+            </button>
+            <button class="param-filter-btn" data-sim-preset="l-shape" style="text-align:left;">
+              <b>L-Shaped Facility</b><br><span style="font-size:11px;font-weight:400;color:var(--text-muted);">Corner Wing Geometry</span>
+            </button>
+            <button class="param-filter-btn" data-sim-preset="courtyard" style="text-align:left;">
+              <b>Courtyard Roof</b><br><span style="font-size:11px;font-weight:400;color:var(--text-muted);">2 Skylight Opening Loops</span>
+            </button>
+          </div>
+
+          <h3 style="font-size:16px;margin-bottom:14px;">Parameters</h3>
+
+          <!-- Slope Slider -->
+          <div class="calc-group">
+            <div class="calc-label-row">
+              <span class="calc-label">Slope Percentage</span>
+              <span class="calc-val-display" id="simSlopeVal">1.50%</span>
+            </div>
+            <input type="range" class="calc-slider" id="simSlopeSlider" min="0.50" max="2.50" step="0.25" value="1.50">
+          </div>
+
+          <!-- Display Toggles -->
+          <div style="margin-bottom:24px;">
+            <div style="font-size:12px;font-weight:700;text-transform:uppercase;color:var(--text-muted);margin-bottom:10px;">Layer Overlays</div>
+            <label style="display:flex;align-items:center;gap:8px;font-size:13px;margin-bottom:8px;cursor:pointer;">
+              <input type="checkbox" id="simChkRidges" checked style="accent-color:var(--gold);">
+              <span>Voronoi Ridge &amp; Valley Lines</span>
+            </label>
+            <label style="display:flex;align-items:center;gap:8px;font-size:13px;margin-bottom:8px;cursor:pointer;">
+              <input type="checkbox" id="simChkContours" checked style="accent-color:var(--emerald);">
+              <span>Dijkstra Slope Contours</span>
+            </label>
+            <label style="display:flex;align-items:center;gap:8px;font-size:13px;cursor:pointer;">
+              <input type="checkbox" id="simChkFlow" checked style="accent-color:var(--blue);">
+              <span>Water Flow Vectors</span>
+            </label>
+          </div>
+
+          <!-- Actions -->
+          <button class="btn btn-outline btn-sm" id="simResetDrains" style="width:100%;margin-bottom:8px;">
+            Reset Default Drains
+          </button>
+          <div style="font-size:11.5px;color:var(--text-muted);line-height:1.5;">
+            💡 <b>Tip:</b> Click inside roof to place new drains (up to 12). Click existing drain to drag.
+          </div>
+        </div>
+
+        <!-- Canvas & Metrics Column -->
+        <div>
+          <div class="sim-canvas-panel">
+            <div class="sim-canvas-toolbar">
+              <div style="display:flex;align-items:center;gap:10px;font-size:13px;font-weight:700;">
+                <span class="dot-swatch green"></span>
+                <span>Interactive Roof Viewport</span>
+              </div>
+              <div style="font-size:12px;color:rgba(255,255,255,0.7);font-family:var(--font-mono);">
+                40m Scale Model · 2D Elevation Matrix
+              </div>
+            </div>
+
+            <!-- Canvas Viewport -->
+            <div class="sim-canvas-viewport">
+              <canvas id="roofSimCanvas"></canvas>
+            </div>
+
+            <!-- Legend & Stats Bar -->
+            <div class="sim-legend-bar">
+              <div class="elevation-gradient-bar">
+                <span style="font-size:11.5px;font-weight:700;">Elevation Drop:</span>
+                <span style="font-size:11px;color:var(--emerald);font-weight:700;">Low (Drain)</span>
+                <div class="grad-strip"></div>
+                <span style="font-size:11px;color:var(--danger);font-weight:700;">High (Ridge)</span>
+              </div>
+              <div style="display:flex;gap:16px;">
+                <span><b style="color:var(--gold);">---</b> Voronoi Bisector</span>
+                <span><b style="color:#5B8DEF;">—</b> Roof Boundary</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Real-Time Metrics Output Row -->
+          <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:20px;">
+            <div class="stat-metric-card">
+              <div class="lbl">Active Drains</div>
+              <div class="num" id="simDrainCount" style="color:var(--emerald);">3</div>
+              <div class="lbl">Voronoi Sites</div>
+            </div>
+            <div class="stat-metric-card">
+              <div class="lbl">Vertices Analyzed</div>
+              <div class="num" id="simVertexCount">212</div>
+              <div class="lbl">Slab Shape Points</div>
+            </div>
+            <div class="stat-metric-card">
+              <div class="lbl">Longest Dijkstra Path</div>
+              <div class="num" id="simLongestPath" style="color:var(--gold);">4.82 m</div>
+              <div class="lbl">Max Surface Travel</div>
+            </div>
+            <div class="stat-metric-card highlight">
+              <div class="lbl">Highest Elevation Delta</div>
+              <div class="num" id="simHighestElev">48 mm</div>
+              <div class="lbl">Peak Slab Offset</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== FOOTER ==================== -->
+  <footer class="site-footer">
+    <div class="wrap">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <h4>⚡ Revit26 RoofTools Suite</h4>
+          <p>
+            Interactive browser sandbox demonstrating algorithmic shortest-path drainage and Voronoi ridges.
+          </p>
+        </div>
+
+        <div class="footer-col">
+          <h5>Tools &amp; Plugins</h5>
+          <div class="footer-links">
+            <a href="autoslope-by-point.html">AutoSlope by Point V026</a>
+            <a href="roofridgelines.html">RoofRidgeLines V67</a>
+            <a href="autoslope-by-drain.html">AutoSlope By Drain V005</a>
+          </div>
+        </div>
+
+        <div class="footer-col">
+          <h5>Interactive Tools</h5>
+          <div class="footer-links">
+            <a href="simulator.html">Live 2D Roof Simulator</a>
+            <a href="roi-calculator.html">Executive ROI Calculator</a>
+            <a href="index.html#parameters">Parameters Dictionary</a>
+          </div>
+        </div>
+
+        <div class="footer-col">
+          <h5>Platform</h5>
+          <p style="font-size:12.5px;line-height:1.6;">
+            Autodesk Revit 2026<br>
+            HTML5 Canvas Geometry Engine<br>
+            Vector Field Math &amp; Polygon Clipping
+          </p>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <div>© 2026 Revit26 RoofTools Suite. Interactive demonstration portal.</div>
+        <div>Autodesk Revit is a registered trademark of Autodesk, Inc.</div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="js/app.js"></script>
+  <script src="js/roof-simulator.js"></script>
+</body>
+</html>

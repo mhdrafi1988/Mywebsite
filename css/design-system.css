@@ -1,0 +1,296 @@
+/* ==========================================================================
+   Revit26 RoofTools Suite — Design System & Tokens
+   ========================================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;600;700;800&display=swap');
+
+:root {
+  /* Core Brand Colors */
+  --navy-deep: #0B192C;
+  --navy-dark: #12233B;
+  --navy: #1E3A5F;
+  --navy-light: #2C5182;
+  --navy-bright: #3665A3;
+  --blue: #2D6CDF;
+  --blue-light: #5B8DEF;
+  --blue-soft: rgba(45, 108, 223, 0.12);
+  --cyan: #00A8A8;
+  --cyan-soft: rgba(0, 168, 168, 0.12);
+  --gold: #C9A24B;
+  --gold-soft: rgba(201, 162, 75, 0.15);
+  --emerald: #27AE60;
+  --emerald-dark: #1E7B44;
+  --emerald-soft: #EAF7EF;
+  --danger: #E74C3C;
+  --danger-dark: #B23325;
+  --danger-soft: #FDEDEB;
+  --warning: #E67E22;
+  --purple: #8E44AD;
+  --magenta: #D35FB7;
+
+  /* Neutral Surface Palette (Light Theme Default) */
+  --bg: #F4F7FB;
+  --bg-subtle: #EEF3F9;
+  --bg-card: #FFFFFF;
+  --bg-card-hover: #FCFDFE;
+  --bg-elevated: #FFFFFF;
+  --border: #D8E2ED;
+  --border-light: #E9EFF6;
+  --border-focus: #2D6CDF;
+
+  /* Typography Colors */
+  --text-main: #142334;
+  --text-muted: #576D86;
+  --text-subtle: #899EBA;
+  --text-inverse: #F4F8FC;
+
+  /* Gradients */
+  --hero-grad: linear-gradient(155deg, #102138 0%, #173254 50%, #1E3A5F 100%);
+  --card-grad: linear-gradient(180deg, rgba(255,255,255,0.9) 0%, rgba(255,255,255,0.98) 100%);
+  --accent-grad: linear-gradient(135deg, var(--blue) 0%, var(--cyan) 100%);
+  --gold-grad: linear-gradient(135deg, #E2BD68 0%, #C9A24B 100%);
+  --emerald-grad: linear-gradient(135deg, #2ECC71 0%, #27AE60 100%);
+  --danger-grad: linear-gradient(135deg, #FF6B6B 0%, #E74C3C 100%);
+
+  /* Shadows & Elevation */
+  --shadow-xs: 0 1px 3px rgba(16, 33, 56, 0.05);
+  --shadow-sm: 0 4px 12px rgba(16, 33, 56, 0.06);
+  --shadow-md: 0 8px 24px rgba(16, 33, 56, 0.08);
+  --shadow-lg: 0 16px 36px rgba(16, 33, 56, 0.12);
+  --shadow-xl: 0 24px 50px rgba(16, 33, 56, 0.18);
+  --shadow-glow-blue: 0 0 30px rgba(45, 108, 223, 0.25);
+  --shadow-glow-gold: 0 0 30px rgba(201, 162, 75, 0.3);
+
+  /* Borders & Radius */
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --radius-xl: 20px;
+  --radius-full: 9999px;
+
+  /* Typography Fonts */
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-display: 'Space Grotesk', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-body: 'IBM Plex Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono: 'IBM Plex Mono', 'JetBrains Mono', Consolas, monospace;
+
+  /* Layout & Spacing */
+  --container-max: 1240px;
+  --nav-height: 68px;
+  --transition-fast: 0.15s ease;
+  --transition-normal: 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  --transition-slow: 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* ==========================================================================
+   Dark Theme Overrides
+   ========================================================================== */
+[data-theme="dark"] {
+  --bg: #0A1422;
+  --bg-subtle: #0F1D30;
+  --bg-card: #13243C;
+  --bg-card-hover: #172B47;
+  --bg-elevated: #1B3150;
+  --border: #223854;
+  --border-light: #1A2D44;
+
+  --text-main: #EBF2FA;
+  --text-muted: #95ACC8;
+  --text-subtle: #6882A3;
+  --text-inverse: #0B192C;
+
+  --card-grad: linear-gradient(180deg, rgba(23, 43, 71, 0.9) 0%, rgba(19, 36, 60, 0.98) 100%);
+  --hero-grad: linear-gradient(155deg, #070E18 0%, #0D1B2D 50%, #12243A 100%);
+  --emerald-soft: rgba(39, 174, 96, 0.15);
+  --danger-soft: rgba(231, 76, 60, 0.15);
+
+  --shadow-xs: 0 1px 3px rgba(0, 0, 0, 0.25);
+  --shadow-sm: 0 4px 14px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 10px 28px rgba(0, 0, 0, 0.4);
+  --shadow-lg: 0 20px 42px rgba(0, 0, 0, 0.5);
+  --shadow-xl: 0 30px 60px rgba(0, 0, 0, 0.65);
+}
+
+/* ==========================================================================
+   Base Styles & Reset
+   ========================================================================== */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 16px;
+  scroll-behavior: smooth;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  font-family: var(--font-body);
+  background-color: var(--bg);
+  color: var(--text-main);
+  line-height: 1.55;
+  overflow-x: hidden;
+  transition: background-color var(--transition-normal), color var(--transition-normal);
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  line-height: 1.2;
+  color: var(--text-main);
+  letter-spacing: -0.015em;
+}
+
+p {
+  margin: 0;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+  transition: color var(--transition-fast);
+}
+
+ul, ol {
+  list-style: none;
+}
+
+button, input, select, textarea {
+  font: inherit;
+  color: inherit;
+}
+
+button {
+  cursor: pointer;
+  border: none;
+  background: none;
+}
+
+img, svg {
+  display: block;
+  max-width: 100%;
+}
+
+code, kbd, samp, pre {
+  font-family: var(--font-mono);
+}
+
+/* ==========================================================================
+   Layout Containers & Utilities
+   ========================================================================== */
+.container, .wrap {
+  width: 100%;
+  max-width: var(--container-max);
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 24px;
+  padding-right: 24px;
+}
+
+@media (min-width: 768px) {
+  .container, .wrap {
+    padding-left: 32px;
+    padding-right: 32px;
+  }
+}
+
+.section {
+  padding: 80px 0;
+  position: relative;
+}
+
+@media (max-width: 768px) {
+  .section {
+    padding: 56px 0;
+  }
+}
+
+.section-head {
+  max-width: 720px;
+  margin: 0 auto 48px;
+  text-align: center;
+}
+
+.section-head.left-aligned {
+  margin-left: 0;
+  text-align: left;
+}
+
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--blue-light);
+  background: var(--blue-soft);
+  border: 1px solid rgba(91, 141, 239, 0.3);
+  padding: 6px 14px;
+  border-radius: var(--radius-full);
+  margin-bottom: 14px;
+}
+
+.eyebrow .dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--blue);
+  box-shadow: 0 0 8px var(--blue);
+}
+
+.eyebrow.gold {
+  color: #E2BD68;
+  background: var(--gold-soft);
+  border-color: rgba(201, 162, 75, 0.35);
+}
+.eyebrow.gold .dot {
+  background: var(--gold);
+  box-shadow: 0 0 8px var(--gold);
+}
+
+.eyebrow.emerald {
+  color: #2ECC71;
+  background: var(--emerald-soft);
+  border-color: rgba(39, 174, 96, 0.35);
+}
+.eyebrow.emerald .dot {
+  background: var(--emerald);
+  box-shadow: 0 0 8px var(--emerald);
+}
+
+.section-title {
+  font-size: clamp(28px, 3.4vw, 42px);
+  margin-bottom: 14px;
+}
+
+.section-desc {
+  font-size: 16px;
+  color: var(--text-muted);
+  line-height: 1.6;
+}
+
+.band-alt {
+  background: var(--bg-card);
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+}
+
+/* Glassmorphism Classes */
+.glass {
+  background: rgba(255, 255, 255, 0.75);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+}
+
+[data-theme="dark"] .glass {
+  background: rgba(19, 36, 60, 0.75);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}

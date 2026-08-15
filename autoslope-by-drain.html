@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AutoSlope By Drain V005 — Sketch-Based Roof Automation for Autodesk Revit 2026</title>
+  <meta name="description" content="Automatic sketch-based drain opening detection, Dijkstra shortest-path roof sloping, and 14 shared Revit parameter write-back for Revit 2026.">
+
+  <!-- Core Stylesheets -->
+  <link rel="stylesheet" href="css/design-system.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/pages.css">
+</head>
+<body>
+
+  <!-- ==================== HEADER & GLOBAL NAV ==================== -->
+  <header class="site-header">
+    <div class="wrap nav-container">
+      <a href="index.html" class="brand-logo">
+        <div class="brand-badge">⚡</div>
+        <div>
+          RoofTools<span class="suite-tag">REVIT 2026</span>
+        </div>
+      </a>
+
+      <nav class="nav-menu">
+        <a href="index.html" class="nav-link">Suite Overview</a>
+
+        <div class="nav-dropdown">
+          <a href="#showcase" class="nav-link active">
+            AutoSlope By Drain <span class="version-badge" style="margin-left:4px;">V005</span>
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"></polyline></svg>
+          </a>
+          <div class="nav-dropdown-menu">
+            <a href="autoslope-by-point.html" class="dropdown-item">
+              <div class="item-title">AutoSlope by Point <span class="version-badge">V026</span></div>
+              <div class="item-desc">Dijkstra shortest-path point-by-point roof sloping</div>
+            </a>
+            <a href="roofridgelines.html" class="dropdown-item">
+              <div class="item-title">RoofRidgeLines <span class="version-badge">V67</span></div>
+              <div class="item-desc">Voronoi ridge &amp; valley generator for drain openings</div>
+            </a>
+            <a href="autoslope-by-drain.html" class="dropdown-item">
+              <div class="item-title">AutoSlope By Drain <span class="version-badge">V005</span></div>
+              <div class="item-desc">Sketch loop detection &amp; 14 shared Revit parameters</div>
+            </a>
+          </div>
+        </div>
+
+        <a href="#roi" class="nav-link">Project Scale ROI</a>
+        <a href="#parameters" class="nav-link">Parameters</a>
+        <a href="simulator.html" class="nav-link">Live Sandbox</a>
+        <a href="roi-calculator.html" class="nav-link">ROI Calculator</a>
+      </nav>
+
+      <div class="nav-actions">
+        <button class="theme-toggle-btn" aria-label="Toggle Dark/Light Mode"></button>
+        <a href="roi-calculator.html" class="btn btn-gold btn-sm">Calculate Savings</a>
+        <button class="mobile-toggle-btn" aria-label="Open Navigation Menu">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ==================== HERO SECTION ==================== -->
+  <header class="hero">
+    <div class="wrap">
+      <div class="hero-content">
+        <div class="eyebrow emerald">
+          Revit 2026 Plugin · Roof Automation V005
+        </div>
+        <h1>
+          Auto-Slope Entire Roofs to Their Drains in <span class="gradient-text">Minutes, Not Hours</span>.
+        </h1>
+        <p class="lead">
+          AutoSlope By Drain detects every drain opening on a sketch-based roof, pathfinds the shortest route from each sub-element vertex, and writes calculated slopes automatically — replacing manual point-by-point vertex editing.
+        </p>
+
+        <div class="hero-metrics-grid">
+          <div class="hero-metric-card">
+            <div class="num">500 pts</div>
+            <div class="lbl">Vertices Processed (Large)</div>
+          </div>
+          <div class="hero-metric-card">
+            <div class="num" style="color:var(--emerald);">98.5%</div>
+            <div class="lbl">Time Reduction vs Manual</div>
+          </div>
+          <div class="hero-metric-card">
+            <div class="num">1–5 min</div>
+            <div class="lbl">Typical Plugin Run Time</div>
+          </div>
+          <div class="hero-metric-card">
+            <div class="num">14</div>
+            <div class="lbl">Parameters Written to Model</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ==================== TOP COMPARISON STRIP ==================== -->
+  <div class="strip">
+    <div class="wrap strip-inner">
+      <div class="strip-stats">
+        <div class="strip-stat">
+          <span class="dot-swatch red"></span> Manual Process: <b>400 min / roof (200 pts)</b>
+        </div>
+        <div class="strip-stat">
+          <span class="dot-swatch green"></span> AutoSlope By Drain: <b>6 min / roof (200 pts)</b>
+        </div>
+      </div>
+      <div class="strip-cta">
+        <span class="strip-reduction-pill">↓ 98.5% time reduction</span>
+        <a class="strip-link" href="#roi">
+          View Project Scale ROI
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"></polyline></svg>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== TOOL SHOWCASE ==================== -->
+  <section class="section" id="showcase">
+    <div class="wrap">
+      <div class="section-head">
+        <div class="eyebrow">Tool Showcase</div>
+        <h2 class="section-title">What AutoSlope By Drain Does</h2>
+        <p class="section-desc">
+          Built for FootPrintRoof elements with sketch-based openings. Detects drains, builds a distance graph across roof vertices, and applies calculated slope elevations directly to the Revit model.
+        </p>
+      </div>
+
+      <div class="grid-features">
+        <div class="feat-card">
+          <div class="feat-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M2 12h20"></path><circle cx="12" cy="12" r="9"></circle></svg>
+          </div>
+          <h4>Automatic Drain Detection</h4>
+          <p>Scans the roof's top face and sketch loops to detect every drain opening, grouped and sized into filterable categories — no manual point picking required.</p>
+        </div>
+
+        <div class="feat-card">
+          <div class="feat-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 12l6 6L20 6"></path></svg>
+          </div>
+          <h4>Dijkstra Path Engine</h4>
+          <p>Builds a graph across all sub-element vertices and calculates the shortest path to the nearest selected drain, respecting Max Edge Distance and Max Path Distance limits.</p>
+        </div>
+
+        <div class="feat-card">
+          <div class="feat-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="3"></rect><path d="M8 12h8M8 8h8M8 16h5"></path></svg>
+          </div>
+          <h4>Selective Run Control</h4>
+          <p>Select All / None / Invert and size-filter drains before running — only checked drains are used as slope targets, with an inline hint if none are selected.</p>
+        </div>
+
+        <div class="feat-card">
+          <div class="feat-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20V10M18 20V4M6 20v-4"></path></svg>
+          </div>
+          <h4>Live Run Metrics</h4>
+          <p>Reports Longest Path, Highest Elevation, Drains Detected/Selected, Arcs Calculated, and run duration directly in the UI after each run.</p>
+        </div>
+
+        <div class="feat-card">
+          <div class="feat-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3h18v18H3z"></path><path d="M3 9h18M9 21V9"></path></svg>
+          </div>
+          <h4>Excel Report Export</h4>
+          <p>Generates a single Excel workbook per run with full vertex-level slope and elevation data — no more separate detailed/summary CSV pairs.</p>
+        </div>
+
+        <div class="feat-card">
+          <div class="feat-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a10 10 0 1 0 10 20 10 10 0 0 0-20z"></path><path d="M12 6v6l4 2"></path></svg>
+          </div>
+          <h4>Persisted Settings</h4>
+          <p>Slope %, distance thresholds, path samples, and export folder are remembered between sessions via SettingsService — no re-entering defaults each run.</p>
+        </div>
+      </div>
+
+      <div style="height:64px;"></div>
+
+      <div class="section-head">
+        <div class="eyebrow">Workflow</div>
+        <h2 class="section-title">How It Works in 5 Steps</h2>
+      </div>
+
+      <div class="steps-container">
+        <div class="step-card">
+          <div class="step-num-badge">1</div>
+          <h4>Select Roof</h4>
+          <p>Pick a FootPrintRoof; shape editing is enabled and vertices reset to zero.</p>
+        </div>
+        <div class="step-card">
+          <div class="step-num-badge">2</div>
+          <h4>Auto-Detect Drains</h4>
+          <p>Sketch-based opening detection finds all drain loops on the roof automatically.</p>
+        </div>
+        <div class="step-card">
+          <div class="step-num-badge">3</div>
+          <h4>Configure &amp; Select</h4>
+          <p>Set slope %, distance thresholds, path samples; choose which drains to target.</p>
+        </div>
+        <div class="step-card">
+          <div class="step-num-badge">4</div>
+          <h4>Run Engine</h4>
+          <p>Dijkstra pathfinding calculates elevation for every vertex and commits to model.</p>
+        </div>
+        <div class="step-card">
+          <div class="step-num-badge">5</div>
+          <h4>Export &amp; Review</h4>
+          <p>Excel workbook generated; 14 roof parameters written; metrics shown in UI.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== REQUIREMENTS & UI PREVIEW ==================== -->
+  <section class="section band-alt">
+    <div class="wrap">
+      <div class="two-col-layout">
+        <!-- Requirements -->
+        <div class="panel-window">
+          <div class="panel-header">
+            <span>Requirements &amp; Architecture</span>
+            <span style="color:var(--emerald);font-weight:700;">Revit 2026</span>
+          </div>
+          <div class="panel-body">
+            <div class="req-grid" style="grid-template-columns:1fr;">
+              <div class="req-item">
+                <span style="color:var(--text-muted);font-weight:700;width:140px;">Host Application:</span>
+                <span>Autodesk Revit 2026</span>
+              </div>
+              <div class="req-item">
+                <span style="color:var(--text-muted);font-weight:700;width:140px;">Roof Type:</span>
+                <span>FootPrintRoof only (sketch-based)</span>
+              </div>
+              <div class="req-item">
+                <span style="color:var(--text-muted);font-weight:700;width:140px;">Excel Engine:</span>
+                <span>Requires EPPlus.dll in plugin folder</span>
+              </div>
+              <div class="req-item">
+                <span style="color:var(--text-muted);font-weight:700;width:140px;">UI Framework:</span>
+                <span>CommunityToolkit.Mvvm (source-generated)</span>
+              </div>
+              <div class="req-item">
+                <span style="color:var(--text-muted);font-weight:700;width:140px;">Execution Mode:</span>
+                <span>Modeless window, external event–driven</span>
+              </div>
+              <div class="req-item">
+                <span style="color:var(--text-muted);font-weight:700;width:140px;">Transaction Mode:</span>
+                <span>Manual (Safe rollback)</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- UI Preview Mockup -->
+        <div class="terminal-card">
+          <div class="terminal-header">
+            <div class="terminal-title">
+              <span class="dot-swatch green"></span>
+              <span>AutoSlope By Drain — Roof: Main Roof (Id 482910)</span>
+            </div>
+          </div>
+          <div class="terminal-body" style="color:#EAF1F8;font-size:13px;line-height:2;">
+            <div style="display:flex;justify-content:space-between;"><span>Drains Detected</span><b style="color:#7FD3A0;">14</b></div>
+            <div style="display:flex;justify-content:space-between;"><span>Selected Targets</span><b style="color:#7FD3A0;">14</b></div>
+            <div style="display:flex;justify-content:space-between;"><span>Slope Applied</span><b>1.50 %</b></div>
+            <div style="display:flex;justify-content:space-between;"><span>Max Edge Distance (m)</span><b>30.00 m</b></div>
+            <div style="display:flex;justify-content:space-between;"><span>Max Path Distance (m)</span><b>40.00 m</b></div>
+            <div style="display:flex;justify-content:space-between;"><span>Path Samples</span><b>10</b></div>
+            <div style="display:flex;justify-content:space-between;"><span>Longest Path (m)</span><b style="color:var(--gold);">27.40 m</b></div>
+            <div style="display:flex;justify-content:space-between;"><span>Highest Elevation (mm)</span><b style="color:var(--danger);">412 mm</b></div>
+            <div style="margin-top:10px;background:rgba(39,174,96,0.2);color:#2ECC71;padding:6px 12px;border-radius:6px;font-weight:700;text-align:center;">
+              ✓ Slopes Applied &amp; Excel Exported Successfully
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== REAL PROJECT TIME COMPARISON (CONFIRMED) ==================== -->
+  <section class="section" id="roi">
+    <div class="wrap">
+      <div class="section-head">
+        <div class="eyebrow">Project-Scale ROI</div>
+        <h2 class="section-title">Manual vs. Plugin at Real Project Scale</h2>
+        <p class="section-desc">
+          Based on confirmed timing: manual sloping takes ~30 sec per shape-editor point across ~100 points per roof, versus ~1–2 min total per roof with AutoSlope By Drain.
+        </p>
+      </div>
+
+      <!-- Project Scale Toggle -->
+      <div class="toggle-row">
+        <button class="toggle-pill-btn active" data-scale-drain="villa">Villa Project (10 roofs)</button>
+        <button class="toggle-pill-btn" data-scale-drain="tower">Tower Project (100 roofs)</button>
+      </div>
+
+      <!-- Summary Metrics Grid -->
+      <div class="stats-summary-grid" id="summaryGrid">
+        <!-- Populated by js/calculators.js -->
+      </div>
+
+      <!-- Comparison Bar Chart Panel -->
+      <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-xl);padding:32px;box-shadow:var(--shadow-md);margin-bottom:40px;">
+        <div id="chartWrap" style="height:260px;padding:20px 20px 0;border-bottom:2px solid var(--border);position:relative;">
+          <!-- Populated by js/calculators.js -->
+        </div>
+        <div style="display:flex;gap:24px;justify-content:center;margin-top:18px;font-size:13px;font-weight:600;color:var(--text-muted);">
+          <span><span class="dot-swatch red" style="display:inline-block;"></span> Manual Process</span>
+          <span><span class="dot-swatch green" style="display:inline-block;"></span> AutoSlope By Drain Plugin</span>
+        </div>
+        <div style="text-align:center;font-size:12px;color:var(--text-muted);margin-top:10px;">
+          Total hours including rework allowance, per project scale
+        </div>
+      </div>
+
+      <!-- Breakdown Table -->
+      <div class="breakdown-table-wrap">
+        <table class="breakdown-table" id="breakdownTable">
+          <!-- Populated by js/calculators.js -->
+        </table>
+      </div>
+
+      <!-- Assumptions -->
+      <div class="assumptions-box">
+        <h4>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+          Assumptions &amp; Notes
+        </h4>
+        <ul>
+          <li><strong>Manual process:</strong> ~30 seconds per shape-editor point (plinth openings, duct openings, roof updates), ~100 points per roof → ~50 min/roof base time, plus 12.5% rework allowance for manual entry errors.</li>
+          <li><strong>Plugin process:</strong> ~1–2 min/roof total (select roof, review detected drains, run) → 1.5 min/roof average, with negligible (~0%) rework due to deterministic Dijkstra pathfinding.</li>
+          <li><strong>Project scales:</strong> Villa ≈ 10 roofs-with-drains; Tower ≈ 100 roofs-with-drains (typical high-rise commercial scale).</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== REVT SHARED PARAMETERS REFERENCE ==================== -->
+  <section class="section band-alt" id="parameters">
+    <div class="wrap">
+      <div class="section-head">
+        <div class="eyebrow">Parameters Reference</div>
+        <h2 class="section-title">14 Shared Revit Parameters Written to Model</h2>
+        <p class="section-desc">
+          AutoSlope By Drain writes its results directly onto the roof element as shared parameters — so the run stays in schedules, tags, and audit records.
+        </p>
+      </div>
+
+      <div class="breakdown-table-wrap">
+        <table class="breakdown-table">
+          <thead>
+            <tr>
+              <th>Parameter Name</th>
+              <th>Type</th>
+              <th>Stored Content &amp; Description</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td><code>AutoSlope_HighestElevation</code></td><td><span class="param-badge">Number</span></td><td>Highest elevation point on the roof, in mm</td></tr>
+            <tr><td><code>AutoSlope_VerticesProcessed</code></td><td><span class="param-badge">Integer</span></td><td>Count of vertices successfully routed to a drain</td></tr>
+            <tr><td><code>AutoSlope_VerticesSkipped</code></td><td><span class="param-badge">Integer</span></td><td>Count of boundary vertices skipped outside threshold</td></tr>
+            <tr><td><code>AutoSlope_DrainCount</code></td><td><span class="param-badge">Integer</span></td><td>Final number of drains detected and used</td></tr>
+            <tr><td><code>AutoSlope_RunDuration_sec</code></td><td><span class="param-badge">Integer</span></td><td>Time taken to complete the run, in seconds</td></tr>
+            <tr><td><code>AutoSlope_LongestPath</code></td><td><span class="param-badge">Number</span></td><td>Longest vertex-to-drain path, in meters</td></tr>
+            <tr><td><code>AutoSlope_SlopePercent</code></td><td><span class="param-badge">Number</span></td><td>Slope ratio applied (e.g. 0.015 for 1.5%)</td></tr>
+            <tr><td><code>AutoSlope_SlopePercent_Text</code></td><td><span class="param-badge">Text</span></td><td>Human-readable slope, e.g. "1.5%"</td></tr>
+            <tr><td><code>AutoSlope_Threshold</code></td><td><span class="param-badge">Number</span></td><td>Minimum elevation threshold, in mm</td></tr>
+            <tr><td><code>AutoSlope_RunDate</code></td><td><span class="param-badge">Text</span></td><td>Timestamp of the run, matched to the UI</td></tr>
+            <tr><td><code>AutoSlope_Status</code></td><td><span class="param-badge">Integer</span></td><td>1 = OK, 2 = Partial, 3 = Failed</td></tr>
+            <tr><td><code>AutoSlope_Versions</code></td><td><span class="param-badge">Text</span></td><td>Plugin build version used for the run</td></tr>
+            <tr><td><code>AutoSlope_DrainToleranceMm</code></td><td><span class="param-badge">Integer</span></td><td>Drain-detection radius applied, in mm</td></tr>
+            <tr><td><code>AutoSlope_DrainToleranceEnabled</code></td><td><span class="param-badge">Integer</span></td><td>Whether drain tolerance was enabled (1/0)</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== FOOTER ==================== -->
+  <footer class="site-footer">
+    <div class="wrap">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <h4>⚡ AutoSlope By Drain V005</h4>
+          <p>
+            Sketch-based automatic drain loop detection and Dijkstra shortest-path roof sloping for Autodesk Revit 2026.
+          </p>
+        </div>
+
+        <div class="footer-col">
+          <h5>Tools in Suite</h5>
+          <div class="footer-links">
+            <a href="autoslope-by-point.html">AutoSlope by Point V026</a>
+            <a href="roofridgelines.html">RoofRidgeLines V67</a>
+            <a href="autoslope-by-drain.html">AutoSlope By Drain V005</a>
+          </div>
+        </div>
+
+        <div class="footer-col">
+          <h5>Interactive Tools</h5>
+          <div class="footer-links">
+            <a href="simulator.html">Live 2D Roof Simulator</a>
+            <a href="roi-calculator.html">Executive ROI Calculator</a>
+            <a href="index.html#parameters">Parameters Dictionary</a>
+          </div>
+        </div>
+
+        <div class="footer-col">
+          <h5>Documentation</h5>
+          <p style="font-size:12.5px;line-height:1.6;">
+            Autodesk Revit 2026<br>
+            Internal Tooling &amp; Efficiency Report<br>
+            CommunityToolkit.Mvvm / Modeless
+          </p>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <div>© 2026 Revit26_Plugin · AutoSlope By Drain V005. Internal tool documentation.</div>
+        <div>Autodesk Revit is a registered trademark of Autodesk, Inc.</div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="js/app.js"></script>
+  <script src="js/calculators.js"></script>
+</body>
+</html>
